@@ -94,7 +94,12 @@ public class MainActivity extends Activity {
 	}
 
 	private String moneyStr(int i) {
-		return i / 1000 + "," + ((i / 10) % 100) + "€";
+		int euros = i / 1000;
+		int cents = (i / 10) % 100;
+
+		String centsStr = Integer.toString(cents);
+		if (cents<10) centsStr = "0"+centsStr;
+		return euros + "," + centsStr + "€";
 	}
 
 	private boolean cardLoaded = false;
