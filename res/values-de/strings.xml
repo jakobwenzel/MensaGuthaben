@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mensa-Guthaben</string>
+    <string name="action_about">Über Mensa-Guthaben</string>
+    <string name="hello_world">Hallo Welt!</string>
+    <string name="auf_mensakarte_legen_">Auf Mensakarte Legen</string>
+    <string name="title_activity_about">Über Mensa-Guthaben</string>
+    <string name="farebot">Diese App enthält Code von <a href="https://github.com/codebutler/farebot">farebot</a>, lizenziert unter GPL.</string>
+    <string name="github">Der Quelltext ist auf <a href="https://github.com/antidau/MensaGuthaben">Github</a> verfügbar!</string>
+
+    <string name="nfc_off">NFC ist ausgeschaltet</string>
+    <string name="turn_nfc_on">Bitte NFC einschalten</string>
+    <string name="goto_settings">Zu Einstellungen wechseln</string>
+</resources>
