@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.yazo_games.mensaguthaben"
     android:versionCode="1"
+        coreApp="true"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="17"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.NFC" />
-
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
@@ -18,7 +18,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" android:persistent="false">
+        android:persistent="false"
+        android:theme="@style/AppTheme" >
         <activity
             android:name="de.yazo_games.mensaguthaben.MainActivity"
             android:label="@string/app_name" >
@@ -31,10 +32,19 @@
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-
             </intent-filter>
-<meta-data android:name="android.nfc.action.TECH_DISCOVERED"
-    android:resource="@xml/tech" />
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/tech" />
+        </activity>
+        <activity
+            android:name="de.yazo_games.mensaguthaben.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="de.yazo_games.mensaguthaben.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.yazo_games.mensaguthaben.MainActivity" />
         </activity>
     </application>
 

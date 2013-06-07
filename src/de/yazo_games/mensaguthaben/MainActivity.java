@@ -2,18 +2,26 @@ package de.yazo_games.mensaguthaben;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
-import android.nfc.tech.NdefFormatable;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.PreferenceScreen;
+
+import com.codebutler.farebot.Utils;
 import com.codebutler.farebot.card.desfire.DesfireFileSettings;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
@@ -23,13 +31,19 @@ public class MainActivity extends Activity {
 	private IntentFilter[] mFilters;
 	private String[][] mTechLists;
 
+	boolean wasDisabled;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
+		
+		Utils.killDialog();
 
+		wasDisabled = !mAdapter.isEnabled();
 		// Create a generic PendingIntent that will be deliver to this activity.
 		// The NFC stack
 		// will fill in the intent with the details of the discovered tag before
@@ -165,14 +179,30 @@ public class MainActivity extends Activity {
 	public void onResume() {
 
 		super.onResume();
+
+		Utils.checkNfcEnabled(this,mAdapter);
+		
 		mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
 				mTechLists);
+		
+		
 
 		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
 			System.out.println("Started by tag discovery");
 			onNewIntent(getIntent());
 
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId()==R.id.action_about) {
+            Intent myIntent = new Intent(this, AboutActivity.class);
+            startActivityForResult(myIntent, 0);
+			return true;
+		}
+
+        return super.onOptionsItemSelected(item);
 	}
 
 }

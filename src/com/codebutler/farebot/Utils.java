@@ -45,21 +45,30 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 import java.util.List;
 
+import de.yazo_games.mensaguthaben.R;
+
 public class Utils {
+	private static AlertDialog dialog = null;;
+	public static void killDialog() {
+		dialog = null;
+	}
     public static void checkNfcEnabled(final Activity activity, NfcAdapter adapter) {
         if (adapter.isEnabled()) {
             return;
         }
-        new AlertDialog.Builder(activity)
-            .setTitle("NFC off")
-            .setMessage("Please turn on NFC")
+        
+        //We do not want two dialogs...
+        if (dialog!=null && dialog.isShowing()) return;
+        dialog = new AlertDialog.Builder(activity)
+            .setTitle(R.string.nfc_off)
+            .setMessage(R.string.turn_nfc_on)
             .setCancelable(true)
             .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
                 }
             })
-            .setNeutralButton("go to settings", new DialogInterface.OnClickListener() {
+            .setNeutralButton(R.string.goto_settings, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     activity.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
                 }
