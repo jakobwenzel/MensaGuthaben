@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 		IntentFilter tech = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
 		mFilters = new IntentFilter[] { tech, };
 		mTechLists = new String[][] { new String[] { IsoDep.class.getName(),
-				NfcA.class.getName(), NdefFormatable.class.getName() } };
+				NfcA.class.getName() } };
 
 		if (savedInstanceState != null) {
 			cardLoaded = savedInstanceState.getBoolean("cardLoaded");
