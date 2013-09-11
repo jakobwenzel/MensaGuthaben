@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.yazo_games.mensaguthaben"
     android:versionCode="1"
-        coreApp="true"
     android:versionName="1.0" >
 
     <uses-sdk
@@ -10,6 +9,7 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.NFC" />
+
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
@@ -28,15 +28,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/tech" />
         </activity>
         <activity
             android:name="de.yazo_games.mensaguthaben.AboutActivity"
@@ -46,6 +38,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.yazo_games.mensaguthaben.MainActivity" />
         </activity>
+        <activity
+            android:name="de.yazo_games.mensaguthaben.SettingsActivity"
+            android:label="@string/title_activity_de.yazo_games.mensaguthaben._settings"
+            android:parentActivityName="de.yazo_games.mensaguthaben.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.yazo_games.mensaguthaben.MainActivity" />
+        </activity>
+
+        <activity-alias
+            android:name=".ActivityAlias"
+            android:targetActivity=".MainActivity"
+            android:enabled="true">
+
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.nfc.action.TECH_DISCOVERED"
+                    android:resource="@xml/tech" />
+        </activity-alias>
     </application>
 
 </manifest>

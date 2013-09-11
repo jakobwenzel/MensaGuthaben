@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="autostart"
+        android:title="@string/pref_title_autostart"
+        android:summary="@string/pref_description_autostart"
+        android:defaultValue="true" />
+
+</PreferenceScreen>

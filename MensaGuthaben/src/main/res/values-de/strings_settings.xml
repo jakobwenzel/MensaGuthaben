@@ -1,0 +1,11 @@
+<resources>
+    <string name="title_activity_de.yazo_games.mensaguthaben._settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Allgemein</string>
+
+    <string name="pref_title_autostart">Automatisch starten</string>
+    <string name="pref_description_autostart">Die App automatisch starten wenn ein passender Tag erkannt wurde.</string>
+</resources>

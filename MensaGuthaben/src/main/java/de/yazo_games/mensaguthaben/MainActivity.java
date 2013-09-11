@@ -11,6 +11,7 @@ import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -60,6 +61,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+
+        //Register or unregister for autostart (in case is has never been done)
+        Boolean autostart = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autostart",true);
+        AutostartRegister.register(getPackageManager(),autostart);
+
 
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
         mIntentFilter = new IntentFilter("android.nfc.action.ADAPTER_STATE_CHANGED");
@@ -137,7 +144,7 @@ public class MainActivity extends Activity {
 
 		String centsStr = Integer.toString(cents);
 		if (cents<10) centsStr = "0"+centsStr;
-		return euros + "," + centsStr + "€";
+		return euros + "," + centsStr + "\u20AC"; //Last one is euro sign
 	}
 
 	private boolean cardLoaded = false;
@@ -226,6 +233,12 @@ public class MainActivity extends Activity {
             startActivityForResult(myIntent, 0);
 			return true;
 		}
+
+        if (item.getItemId()==R.id.action_settings) {
+            Intent myIntent = new Intent(this, SettingsActivity.class);
+            startActivityForResult(myIntent, 0);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
 	}

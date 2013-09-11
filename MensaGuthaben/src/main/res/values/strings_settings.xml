@@ -1,0 +1,11 @@
+<resources>
+    <string name="title_activity_de.yazo_games.mensaguthaben._settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_autostart">Autostart on tag discovery</string>
+    <string name="pref_description_autostart">Start the app when a matching tag is discovered</string>
+</resources>
