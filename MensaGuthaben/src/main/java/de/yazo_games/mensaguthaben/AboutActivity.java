@@ -10,20 +10,24 @@ import android.widget.TextView;
 
 public class AboutActivity extends Activity {
 
+    private void makeLinkClickable(int id) {
+
+        TextView tv = (TextView) findViewById(id);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
 
-	    TextView tvFarebot = (TextView) findViewById(R.id.tvFarebot);
-	    tvFarebot.setMovementMethod(LinkMovementMethod.getInstance());
-	    
 
-	    TextView tvSource = (TextView) findViewById(R.id.tvSource);
-	    tvSource.setMovementMethod(LinkMovementMethod.getInstance());
+        makeLinkClickable(R.id.tvCopyright);
+        makeLinkClickable(R.id.tvFarebot);
+        makeLinkClickable(R.id.tvSource);
+        makeLinkClickable(R.id.tvWebsite);
 	}
 
 	/**

@@ -15,4 +15,6 @@
     <string name="last_withdrawal">Letzte Abbuchung:</string>
     <string name="card_not_supported">Karte nicht unterstützt</string>
     <string name="communication_fail">Kommunikation mit Karte fehlgeschlagen</string>
+
+    <string name="website">Wenn du die App an Karten von einer anderen Uni ausprobierst würde ich mich über Rückmeldungen freuen. <a href="mailto:jakobwenzel92@gmail.com">Schreib mir eine Mail</a> oder <a href="http://mensaguthaben.yazo-games.de/andere-unis/">hinterlass einen Kommentar auf meiner Webseite</a></string>
 </resources>
