@@ -13,4 +13,7 @@
     <string name="nfc_off">NFC is off</string>
     <string name="turn_nfc_on">Please turn on NFC</string>
     <string name="goto_settings">go to settings</string>
+    <string name="last_withdrawal">Last withdrawal:</string>
+    <string name="card_not_supported">Card not supported</string>
+    <string name="communication_fail">Communication with Card failed</string>
 </resources>

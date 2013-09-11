@@ -1,2 +1,7 @@
 gen
 *.class
+MensaGuthaben/build
+local.properties
+.gradle
+*.iml
+.idea

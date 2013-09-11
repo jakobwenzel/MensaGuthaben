@@ -26,10 +26,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.nfc.NfcAdapter;
-import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
@@ -209,7 +206,7 @@ public class Utils {
     }
 
 
-    public static <T> T findInList(List<T> list, Matcher matcher) {
+    public static <T> T findInList(List<T> list, Matcher<T> matcher) {
         for (T item : list) {
             if (matcher.matches(item)) {
                 return item;

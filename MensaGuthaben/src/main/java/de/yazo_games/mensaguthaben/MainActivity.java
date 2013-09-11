@@ -16,11 +16,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceScreen;
-
 import com.codebutler.farebot.Utils;
 import com.codebutler.farebot.card.desfire.DesfireFileSettings;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
@@ -30,8 +25,35 @@ public class MainActivity extends Activity {
 	private PendingIntent mPendingIntent;
 	private IntentFilter[] mFilters;
 	private String[][] mTechLists;
+    private IntentFilter mIntentFilter;
 
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        	String action = intent.getAction();
+            if ("android.nfc.action.ADAPTER_STATE_CHANGED".equals(action)) {
+            	updateNfcState();
+            }
+        }
+    };
 	boolean wasDisabled;
+	
+	boolean lastNfcState = true;
+	public void updateNfcState() {
+		//Do nothing if no change
+		if (mAdapter.isEnabled()==lastNfcState) return;
+		lastNfcState = mAdapter.isEnabled();
+
+		TextView currentTv = (TextView) findViewById(R.id.current);
+		TextView lastTv = (TextView) findViewById(R.id.last);
+		if (mAdapter.isEnabled()) {
+			currentTv.setText(R.string.auf_mensakarte_legen_);
+			lastTv.setText("");
+		} else {
+			currentTv.setText(R.string.turn_nfc_on);
+			lastTv.setText("");
+		}
+	}
 	
 	
 	@Override
@@ -40,8 +62,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
+        mIntentFilter = new IntentFilter("android.nfc.action.ADAPTER_STATE_CHANGED");
 		
 		Utils.killDialog();
+
 
 		wasDisabled = !mAdapter.isEnabled();
 		// Create a generic PendingIntent that will be deliver to this activity.
@@ -131,7 +155,7 @@ public class MainActivity extends Activity {
 		currentTv.setText(current);
 
 		TextView lastTv = (TextView) findViewById(R.id.last);
-		lastTv.setText("Letzte Abbuchung: " + last);
+		lastTv.setText(getString(R.string.last_withdrawal)+" " + last);
 	}
 
 	@Override
@@ -166,11 +190,11 @@ public class MainActivity extends Activity {
 				updateView(data, value.value);
 			} else {
 				System.out.println("File was not a value file");
-				toast("Card not supported.");
+				toast(getString(R.string.card_not_supported));
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			toast("Communication with Card failed.");
+			toast(getString(R.string.communication_fail));
 		}
 
 	}
@@ -179,6 +203,7 @@ public class MainActivity extends Activity {
 	public void onResume() {
 
 		super.onResume();
+        getApplicationContext().registerReceiver(mReceiver, mIntentFilter);
 
 		Utils.checkNfcEnabled(this,mAdapter);
 		
