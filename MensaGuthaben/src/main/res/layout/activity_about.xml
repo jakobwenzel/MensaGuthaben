@@ -8,12 +8,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AboutActivity" >
 
+	<TextView
+		android:id="@+id/tvVersion"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_centerInParent="false"/>
+
     <TextView
         android:id="@+id/tvCopyright"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="false"
+		android:layout_below="@+id/tvVersion"
         android:text="@string/copyright" />
 
 
@@ -43,5 +51,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
         android:text="@string/github" />
+
 
 </RelativeLayout>

@@ -26,6 +26,7 @@ import android.nfc.tech.IsoDep;
 import com.codebutler.farebot.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -52,16 +53,16 @@ public class DesfireProtocol {
         mTagTech = tagTech;
     }
 
-    public DesfireManufacturingData getManufacturingData() throws Exception {
+    public DesfireManufacturingData getManufacturingData() throws DesfireException {
         byte[] respBuffer = sendRequest(GET_MANUFACTURING_DATA);
         
         if (respBuffer.length != 28)
-            throw new Exception("Invalid response");
+            throw new DesfireException("Invalid response");
 
         return new DesfireManufacturingData(respBuffer);
     }
 
-    public int[] getAppList() throws Exception {
+    public int[] getAppList() throws DesfireException {
         byte[] appDirBuf = sendRequest(GET_APPLICATION_DIRECTORY);
 
         int[] appIds = new int[appDirBuf.length / 3];
@@ -76,7 +77,7 @@ public class DesfireProtocol {
         return appIds;
     }
 
-    public void selectApp (int appId) throws Exception {
+    public void selectApp (int appId) throws DesfireException {
         byte[] appIdBuff = new byte[3];
         appIdBuff[0] = (byte) ((appId & 0xFF0000) >> 16);
         appIdBuff[1] = (byte) ((appId & 0xFF00) >> 8);
@@ -85,7 +86,7 @@ public class DesfireProtocol {
         sendRequest(SELECT_APPLICATION, appIdBuff);
     }
 
-    public int[] getFileList() throws Exception {
+    public int[] getFileList() throws DesfireException {
         byte[] buf = sendRequest(GET_FILES);
         int[] fileIds = new int[buf.length];
         for (int x = 0; x < buf.length; x++) {
@@ -94,12 +95,13 @@ public class DesfireProtocol {
         return fileIds;
     }
 
-    public DesfireFileSettings getFileSettings (int fileNo) throws Exception {
-        byte[] data = sendRequest(GET_FILE_SETTINGS, new byte[] { (byte) fileNo });
-        return DesfireFileSettings.Create(data);
+    public DesfireFileSettings getFileSettings (int fileNo) throws DesfireException {
+		byte[] data = new byte[0];
+		data = sendRequest(GET_FILE_SETTINGS, new byte[] { (byte) fileNo });
+		return DesfireFileSettings.Create(data);
     }
 
-    public byte[] readFile (int fileNo) throws Exception {
+    public byte[] readFile (int fileNo) throws DesfireException {
         return sendRequest(READ_DATA, new byte[] {
             (byte) fileNo,
             (byte) 0x0, (byte) 0x0, (byte) 0x0,
@@ -107,7 +109,7 @@ public class DesfireProtocol {
         });
     }
 
-    public byte[] readRecord (int fileNum) throws Exception {
+    public byte[] readRecord (int fileNum) throws DesfireException {
         return sendRequest(READ_RECORD, new byte[]{
                 (byte) fileNum,
                 (byte) 0x0, (byte) 0x0, (byte) 0x0,
@@ -115,7 +117,7 @@ public class DesfireProtocol {
         });
     }
 
-	public int readValue(int fileNum) throws Exception  {
+	public int readValue(int fileNum) throws DesfireException  {
         byte[] buf = sendRequest(READ_VALUE, new byte[]{
                 (byte) fileNum
         });
@@ -124,18 +126,23 @@ public class DesfireProtocol {
 	}
     
 
-    private byte[] sendRequest (byte command) throws Exception {
+    private byte[] sendRequest (byte command) throws DesfireException {
         return sendRequest(command, null);
     }
 
-    private byte[] sendRequest (byte command, byte[] parameters) throws Exception {
+    private byte[] sendRequest (byte command, byte[] parameters) throws DesfireException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-        byte[] recvBuffer = mTagTech.transceive(wrapMessage(command, parameters));
+		byte[] recvBuffer = new byte[0];
+		try {
+			recvBuffer = mTagTech.transceive(wrapMessage(command, parameters));
+		} catch (IOException e) {
+			throw new DesfireException(e);
+		}
 
-        while (true) {
+		while (true) {
             if (recvBuffer[recvBuffer.length - 2] != (byte) 0x91)
-                throw new Exception("Invalid response");
+                throw new DesfireException("Invalid response");
 
             output.write(recvBuffer, 0, recvBuffer.length - 2);
 
@@ -143,18 +150,22 @@ public class DesfireProtocol {
             if (status == OPERATION_OK) {
                 break;
             } else if (status == ADDITIONAL_FRAME) {
-                recvBuffer = mTagTech.transceive(wrapMessage(GET_ADDITIONAL_FRAME, null));
-            } else if (status == PERMISSION_DENIED) {
-                throw new Exception("Permission denied");
+				try {
+					recvBuffer = mTagTech.transceive(wrapMessage(GET_ADDITIONAL_FRAME, null));
+				} catch (IOException e) {
+					throw new DesfireException(e);
+				}
+			} else if (status == PERMISSION_DENIED) {
+                throw new DesfireException("Permission denied");
             } else {
-                throw new Exception("Unknown status code: " + Integer.toHexString(status & 0xFF));
+                throw new DesfireException("Unknown status code: " + Integer.toHexString(status & 0xFF));
             }
         }
         
         return output.toByteArray();
     }
 
-    private byte[] wrapMessage (byte command, byte[] parameters) throws Exception {
+    private byte[] wrapMessage (byte command, byte[] parameters) throws DesfireException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         stream.write((byte) 0x90);
@@ -163,8 +174,12 @@ public class DesfireProtocol {
         stream.write((byte) 0x00);
         if (parameters != null) {
             stream.write((byte) parameters.length);
-            stream.write(parameters);
-        }
+			try {
+				stream.write(parameters);
+			} catch (IOException e) {
+				throw new DesfireException(e);
+			}
+		}
         stream.write((byte) 0x00);
 
         return stream.toByteArray();

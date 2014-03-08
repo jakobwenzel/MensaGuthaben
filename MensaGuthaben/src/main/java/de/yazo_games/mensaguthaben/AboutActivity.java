@@ -1,6 +1,8 @@
 package de.yazo_games.mensaguthaben;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.method.LinkMovementMethod;
@@ -16,12 +18,25 @@ public class AboutActivity extends Activity {
         tv.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+	private void showVersion() {
+		PackageInfo pInfo = null;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			TextView tv = (TextView) findViewById(R.id.tvVersion);
+			tv.setText(getString(R.string.version)+" "+pInfo.versionName+" ("+pInfo.versionCode+")");
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		// Show the Up button in the action bar.
 		setupActionBar();
+
+		showVersion();
 
 
         makeLinkClickable(R.id.tvCopyright);

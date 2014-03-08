@@ -43,7 +43,7 @@ public abstract class DesfireFileSettings implements Parcelable {
     static final byte LINEAR_RECORD_FILE = (byte) 0x03;
     static final byte CYCLIC_RECORD_FILE = (byte) 0x04;
     
-    public static DesfireFileSettings Create (byte[] data) throws Exception {
+    public static DesfireFileSettings Create (byte[] data) throws DesfireException {
         byte fileType = (byte) data[0];
 
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
@@ -55,7 +55,7 @@ public abstract class DesfireFileSettings implements Parcelable {
         else if (fileType == VALUE_FILE)
             return new ValueDesfireFileSettings(stream);
         else
-            throw new Exception("Unknown file type: " + Integer.toHexString(fileType));
+            throw new DesfireException("Unknown file type: " + Integer.toHexString(fileType));
     }
 
     private DesfireFileSettings (ByteArrayInputStream stream) {

@@ -14,12 +14,20 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codebutler.farebot.Utils;
+import com.codebutler.farebot.card.desfire.DesfireException;
 import com.codebutler.farebot.card.desfire.DesfireFileSettings;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
+
+import java.io.IOException;
+
+import de.yazo_games.mensaguthaben.cardreader.IntercardReader;
+import de.yazo_games.mensaguthaben.cardreader.Readers;
+import de.yazo_games.mensaguthaben.cardreader.ValueData;
 
 public class MainActivity extends Activity {
 	private NfcAdapter mAdapter;
@@ -40,6 +48,10 @@ public class MainActivity extends Activity {
 	boolean wasDisabled;
 	
 	boolean lastNfcState = true;
+
+	private boolean cardLoaded = false;
+	private ValueData value;
+
 	public void updateNfcState() {
 		//Do nothing if no change
 		if (mAdapter.isEnabled()==lastNfcState) return;
@@ -92,9 +104,8 @@ public class MainActivity extends Activity {
 		if (savedInstanceState != null) {
 			cardLoaded = savedInstanceState.getBoolean("cardLoaded");
 			if (cardLoaded) {
-				currentI = savedInstanceState.getInt("current");
-				lastI = savedInstanceState.getInt("last");
-				updateView(currentI, lastI);
+				value = (ValueData) savedInstanceState.getSerializable("value");
+				updateView(value);
 			}
 		}
 	}
@@ -139,37 +150,35 @@ public class MainActivity extends Activity {
 	}
 
 	private String moneyStr(int i) {
-		int euros = i / 1000;
-		int cents = (i / 10) % 100;
+		int euros = i / 100;
+		int cents = i % 100;
 
 		String centsStr = Integer.toString(cents);
 		if (cents<10) centsStr = "0"+centsStr;
 		return euros + "," + centsStr + "\u20AC"; //Last one is euro sign
 	}
 
-	private boolean cardLoaded = false;
-	int currentI;
-	int lastI;
 
-	private void updateView(int currentI, int lastI) {
+	private void updateView(ValueData value) {
 		this.cardLoaded = true;
-		this.currentI = currentI;
-		this.lastI = lastI;
-		String current = moneyStr(currentI);
-		String last = moneyStr(lastI);
 
+		String current = moneyStr(value.value);
 		TextView currentTv = (TextView) findViewById(R.id.current);
 		currentTv.setText(current);
 
 		TextView lastTv = (TextView) findViewById(R.id.last);
-		lastTv.setText(getString(R.string.last_withdrawal)+" " + last);
+		if (value.lastTransaction!=null) {
+			String last = moneyStr(value.lastTransaction);
+			lastTv.setText(getString(R.string.last_withdrawal)+" " + last);
+		} else {
+			lastTv.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle bundle) {
 		bundle.putBoolean("cardLoaded", cardLoaded);
-		bundle.putInt("current", currentI);
-		bundle.putInt("last", lastI);
+		bundle.putSerializable("value", value);
 	}
 
 	private void loadCard(Tag tag) {
@@ -181,27 +190,17 @@ public class MainActivity extends Activity {
 
 			DesfireProtocol desfireTag = new DesfireProtocol(tech);
 
-			System.out.println("Selecting app");
-			int appId = 6259733;
-			desfireTag.selectApp(appId);
+			value = Readers.getInstance().readCard(desfireTag);
+			if (value!=null)
+				updateView(value);
+			else toast(getString(R.string.card_not_supported));
 
-			System.out.println("Loading file");
-			DesfireFileSettings settings = desfireTag.getFileSettings(1);
-
-			if (settings instanceof DesfireFileSettings.ValueDesfireFileSettings) {
-				DesfireFileSettings.ValueDesfireFileSettings value = (DesfireFileSettings.ValueDesfireFileSettings) settings;
-
-				System.out.println("Reading value");
-				int data = desfireTag.readValue(1);
-
-				updateView(data, value.value);
-			} else {
-				System.out.println("File was not a value file");
-				toast(getString(R.string.card_not_supported));
-			}
-		} catch (Exception ex) {
+		} catch (DesfireException ex) {
 			ex.printStackTrace();
 			toast(getString(R.string.communication_fail));
+		} catch (IOException e) {
+			e.printStackTrace();
+			toast(getString(R.string.communication_fail) + "ioexception");
 		}
 
 	}

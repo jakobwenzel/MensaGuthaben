@@ -30,6 +30,11 @@ import android.nfc.NfcAdapter;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
+
+import com.codebutler.farebot.card.desfire.DesfireException;
+import com.codebutler.farebot.card.desfire.DesfireFileSettings;
+import com.codebutler.farebot.card.desfire.DesfireProtocol;
+
 import org.w3c.dom.Node;
 
 import javax.xml.transform.OutputKeys;
@@ -249,4 +254,42 @@ public class Utils {
             return uRet;
         }
     }
+
+
+	public static DesfireFileSettings selectAppFile(DesfireProtocol tag, int appID, int fileID) {
+		try {
+			tag.selectApp(appID);
+		} catch (DesfireException e) {
+			System.out.println("App not found");
+			return null;
+		}
+		try {
+			return tag.getFileSettings(1);
+		} catch (DesfireException e) {
+			System.out.println("File not found");
+			return null;
+		}
+	}
+
+	public static boolean arrayContains(int[] arr, int item) {
+		for (int i: arr)
+			if (i==item)
+				return true;
+		return false;
+	}
+
+	public static boolean containsAppFile(DesfireProtocol tag, int appID, int fileID) {
+		try {
+			tag.selectApp(appID);
+		} catch (DesfireException e) {
+			System.out.println("App not found");
+			return false;
+		}
+		try {
+			return arrayContains(tag.getFileList(),fileID);
+		} catch (DesfireException e) {
+			System.out.println("File not found");
+			return false;
+		}
+	}
 }
