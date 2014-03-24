@@ -266,7 +266,7 @@ public class Utils {
 			return null;
 		}
 		try {
-			return tag.getFileSettings(1);
+			return tag.getFileSettings(fileID);
 		} catch (DesfireException e) {
 			Log.w(TAG,"File not found");
 			return null;
