@@ -12,6 +12,7 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +26,10 @@ import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
 import java.io.IOException;
 
-import de.yazo_games.mensaguthaben.cardreader.IntercardReader;
+
 import de.yazo_games.mensaguthaben.cardreader.Readers;
 import de.yazo_games.mensaguthaben.cardreader.ValueData;
+
 
 public class MainActivity extends Activity {
 	private NfcAdapter mAdapter;
@@ -36,7 +38,9 @@ public class MainActivity extends Activity {
 	private String[][] mTechLists;
     private IntentFilter mIntentFilter;
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	private static final String TAG = MainActivity.class.getName();
+
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
         	String action = intent.getAction();
@@ -68,11 +72,12 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		Log.i(TAG,"activity started");
 
 
         //Register or unregister for autostart (in case is has never been done)
@@ -112,9 +117,9 @@ public class MainActivity extends Activity {
 
 	@Override
 	public void onNewIntent(Intent intent) {
-		System.out.println("Foreground dispatch");
+		Log.i(TAG,"Foreground dispatch");
 		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
-			System.out.println("Discovered tag with intent: " + intent);
+			Log.i(TAG,"Discovered tag with intent: " + intent);
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
 			loadCard(tag);
@@ -133,7 +138,7 @@ public class MainActivity extends Activity {
 		Toast toast = Toast.makeText(getApplicationContext(), text,
 				Toast.LENGTH_LONG);
 		toast.show();
-		System.out.println(text);
+		Log.i(TAG,"Showing toast: "+text);
 	}
 
 	public static String bytesToHex(byte[] bytes) {
@@ -181,9 +186,9 @@ public class MainActivity extends Activity {
 		bundle.putSerializable("value", value);
 	}
 
-	private void loadCard(Tag tag) {
+	private void  loadCard(Tag tag) {
 		try {
-			System.out.println("Loading tag");
+			Log.i(TAG,"Loading tag");
 			IsoDep tech = IsoDep.get(tag);
 
 			tech.connect();
@@ -200,7 +205,7 @@ public class MainActivity extends Activity {
 			toast(getString(R.string.communication_fail));
 		} catch (IOException e) {
 			e.printStackTrace();
-			toast(getString(R.string.communication_fail) + "ioexception");
+			toast(getString(R.string.communication_fail) + " ioexception");
 		}
 
 	}
@@ -219,7 +224,7 @@ public class MainActivity extends Activity {
 		
 
 		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
-			System.out.println("Started by tag discovery");
+			Log.i(TAG,"Started by tag discovery");
 			onNewIntent(getIntent());
 
 		}

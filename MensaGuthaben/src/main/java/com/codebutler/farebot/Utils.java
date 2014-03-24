@@ -50,6 +50,8 @@ import java.util.List;
 import de.yazo_games.mensaguthaben.R;
 
 public class Utils {
+
+	private static final String TAG = Utils.class.getName();
 	private static AlertDialog dialog = null;;
 	public static void killDialog() {
 		dialog = null;
@@ -260,13 +262,13 @@ public class Utils {
 		try {
 			tag.selectApp(appID);
 		} catch (DesfireException e) {
-			System.out.println("App not found");
+			Log.w(TAG,"App not found");
 			return null;
 		}
 		try {
 			return tag.getFileSettings(1);
 		} catch (DesfireException e) {
-			System.out.println("File not found");
+			Log.w(TAG,"File not found");
 			return null;
 		}
 	}
@@ -282,13 +284,13 @@ public class Utils {
 		try {
 			tag.selectApp(appID);
 		} catch (DesfireException e) {
-			System.out.println("App not found");
+			Log.w(TAG,"App not found");
 			return false;
 		}
 		try {
 			return arrayContains(tag.getFileList(),fileID);
 		} catch (DesfireException e) {
-			System.out.println("File not found");
+			Log.w(TAG,"File not found");
 			return false;
 		}
 	}
