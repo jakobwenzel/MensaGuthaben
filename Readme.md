@@ -5,8 +5,8 @@ This app allows you to read your current balance cards manufactured by Intercard
 
 The App has been successfully tested on cards used at various universities:
 
-* Uni Bayreuth (nur Druck-/Kopierguthaben sichtbar)
-* Uni Bochum (nur neue Karten)
+* Uni Bayreuth (only Print-/Copy-balance visible)
+* Uni Bochum (only newer cards)
 * TU Braunschweig
 * Uni Bremen
 * TU Clausthal
