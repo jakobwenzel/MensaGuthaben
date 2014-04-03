@@ -23,23 +23,14 @@
 package de.yazo_games.mensaguthaben;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
 
 public class AboutActivity extends Activity {
 
@@ -59,13 +50,7 @@ public class AboutActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-	private void toast(String text) {
 
-		Toast toast = Toast.makeText(getApplicationContext(), text,
-				Toast.LENGTH_LONG);
-		toast.show();
-		System.out.println(text);
-	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,31 +65,6 @@ public class AboutActivity extends Activity {
         makeLinkClickable(R.id.tvFarebot);
         makeLinkClickable(R.id.tvSource);
         makeLinkClickable(R.id.tvWebsite);
-
-		final Button button = (Button) findViewById(R.id.button);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				try {
-					File filename = new File(Environment.getExternalStorageDirectory()+"/mensaguthaben.log");
-					filename.createNewFile();
-					String cmd = "logcat -d -f "+filename.getAbsolutePath();
-					Runtime.getRuntime().exec(cmd).waitFor();
-
-					Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-					emailIntent.setType("application/octet-stream");
-					emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"jakobwenzel92@gmail.com"});
-					emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Mensa-Guthaben Log");
-					emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+filename.getAbsolutePath()));
-					startActivity(emailIntent);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 	/**
