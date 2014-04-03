@@ -18,20 +18,26 @@ public class MagnaCartaReader implements ICardReader {
 		final int fileId = 2;
 
 		//We don't want to use getFileSettings as they are doing some weird stuff with the fileType
-		if (Utils.containsAppFile(card,appId,fileId)) {
-			Log.i(TAG, "App and file found");
-			try {
-				byte[] data = card.readFile(fileId);
+		try {
+			card.selectApp(appId);
+		} catch (DesfireException e) {
+			Log.w(TAG,"App not found");
+			Log.w(TAG, e);
+			return null;
+		}
 
-				int value = data[6]<<8 | data[7];
-				return new ValueData(value,null);
+		//For some reason we can't use getFileList either, because the card answers with an
+		//authentication error
 
-			} catch (DesfireException e) {
-				Log.w(TAG,"Exception while reading tag",e);
-				return null;
-			}
-		} else {
-			Log.i(TAG,"App and file not found, Tag is incompatible.");
+		try {
+			byte[] data = card.readFile(fileId);
+
+			int value = data[6]<<8 | data[7];
+			return new ValueData(value,null);
+
+		} catch (DesfireException e) {
+			Log.w(TAG,"Exception while reading tag",e);
+			Log.w(TAG, e);
 			return null;
 		}
 	}
