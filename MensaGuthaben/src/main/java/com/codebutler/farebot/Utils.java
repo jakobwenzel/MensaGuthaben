@@ -285,12 +285,14 @@ public class Utils {
 			tag.selectApp(appID);
 		} catch (DesfireException e) {
 			Log.w(TAG,"App not found");
+			Log.w(TAG, e);
 			return false;
 		}
 		try {
 			return arrayContains(tag.getFileList(),fileID);
 		} catch (DesfireException e) {
 			Log.w(TAG,"File not found");
+			Log.w(TAG, e);
 			return false;
 		}
 	}
