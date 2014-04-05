@@ -51,7 +51,10 @@ public class MagnaCartaReader implements ICardReader {
 		try {
 			byte[] data = card.readFile(fileId);
 
-			int value = data[6]<<8 | data[7];
+			int low = ((int) data[7]) & 0xFF;
+			int hi = ((int) data[6]) & 0xFF;
+
+			int value = hi<<8 | low;
 			return new ValueData(value,null);
 
 		} catch (DesfireException e) {
