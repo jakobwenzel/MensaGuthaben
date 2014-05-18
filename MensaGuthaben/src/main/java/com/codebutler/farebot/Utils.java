@@ -27,6 +27,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
@@ -74,7 +75,13 @@ public class Utils {
             })
             .setNeutralButton(R.string.goto_settings, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    activity.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+						Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
+						activity.startActivity(intent);
+					} else {
+						Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+						activity.startActivity(intent);
+					}
                 }
             })
             .show();
