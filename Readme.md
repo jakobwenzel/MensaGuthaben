@@ -14,11 +14,13 @@ The App has been successfully tested on cards used at various universities:
 * TU Darmstadt
 * h_da Darmstadt
 * TU Dresden Emeal
+* HS Hannover
 * Uni Heidelberg
 * TU Ilmenau
-* Uni K�ln
+* HS Koblenz
+* Uni Köln
 * Uni Leipzig
 * Uni Stuttgart
-* Uni W�rzburg
+* Uni Würzburg
 
 Now available on Google Play: https://play.google.com/store/apps/details?id=de.yazo_games.mensaguthaben
