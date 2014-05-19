@@ -209,12 +209,18 @@ public class MainActivity extends Activity {
 	}
 
 	private void  loadCard(Tag tag) {
+		Log.i(TAG,"Loading tag");
+		IsoDep tech = IsoDep.get(tag);
+
 		try {
-			Log.i(TAG,"Loading tag");
-			IsoDep tech = IsoDep.get(tag);
-
 			tech.connect();
+		} catch (IOException e) {
+			//Tag was removed. We fail silently.
+			e.printStackTrace();
+			return;
+		}
 
+		try {
 			DesfireProtocol desfireTag = new DesfireProtocol(tech);
 
 			value = Readers.getInstance().readCard(desfireTag);
@@ -225,9 +231,6 @@ public class MainActivity extends Activity {
 		} catch (DesfireException ex) {
 			ex.printStackTrace();
 			toast(getString(R.string.communication_fail));
-		} catch (IOException e) {
-			e.printStackTrace();
-			toast(getString(R.string.communication_fail) + " ioexception");
 		}
 
 	}
