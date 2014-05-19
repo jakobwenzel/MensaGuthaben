@@ -32,7 +32,8 @@
             android:layout_below="@+id/tvCopyright"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="38dp"
-            android:text="@string/website" />
+            android:text="@string/website"
+			android:gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/tvFarebot"
@@ -41,7 +42,8 @@
         android:layout_below="@+id/tvWebsite"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
-        android:text="@string/farebot" />
+        android:text="@string/farebot"
+		android:gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/tvSource"
@@ -50,6 +52,7 @@
         android:layout_below="@+id/tvFarebot"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
-        android:text="@string/github" />
+        android:text="@string/github"
+		android:gravity="center_horizontal"/>
 
 </RelativeLayout>
