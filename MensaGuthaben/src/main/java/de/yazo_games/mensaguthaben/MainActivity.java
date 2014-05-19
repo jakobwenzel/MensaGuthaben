@@ -228,9 +228,14 @@ public class MainActivity extends Activity {
 				updateView(value);
 			else toast(getString(R.string.card_not_supported));
 
+			tech.close();
+
 		} catch (DesfireException ex) {
 			ex.printStackTrace();
 			toast(getString(R.string.communication_fail));
+		} catch (IOException e) {
+			//This can only happen on tag close. we ignore this.
+			e.printStackTrace();
 		}
 
 	}
