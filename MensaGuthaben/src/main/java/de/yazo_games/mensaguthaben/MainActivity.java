@@ -43,11 +43,9 @@ import android.widget.Toast;
 
 import com.codebutler.farebot.Utils;
 import com.codebutler.farebot.card.desfire.DesfireException;
-import com.codebutler.farebot.card.desfire.DesfireFileSettings;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
 import java.io.IOException;
-
 
 import de.yazo_games.mensaguthaben.cardreader.Readers;
 import de.yazo_games.mensaguthaben.cardreader.ValueData;
@@ -223,12 +221,24 @@ public class MainActivity extends Activity {
 		try {
 			DesfireProtocol desfireTag = new DesfireProtocol(tech);
 
+
+			//Android has a Bug on Devices using a Broadcom NFC chip. See
+			// http://code.google.com/p/android/issues/detail?id=58773
+			//A Workaround is to connected to the tag, issue a dummy operation and then reconnect...
+			try {
+				desfireTag.selectApp(0);
+			}catch (ArrayIndexOutOfBoundsException e) {
+				//Exception occurs because the actual response is shorter than the error response
+				Log.i(TAG, "Broadcom workaround was needed");
+			}
+
+			tech.close();
+			tech.connect();
+
 			value = Readers.getInstance().readCard(desfireTag);
 			if (value!=null)
 				updateView(value);
 			else toast(getString(R.string.card_not_supported));
-
-			tech.close();
 
 		} catch (DesfireException ex) {
 			ex.printStackTrace();
@@ -236,6 +246,13 @@ public class MainActivity extends Activity {
 		} catch (IOException e) {
 			//This can only happen on tag close. we ignore this.
 			e.printStackTrace();
+		} finally {
+			if (tech.isConnected())
+				try {
+					tech.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 
 	}
