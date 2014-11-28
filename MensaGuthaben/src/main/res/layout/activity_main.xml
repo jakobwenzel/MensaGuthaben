@@ -25,7 +25,7 @@
         android:layout_below="@+id/current"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+		android:textSize="22sp"
+		tools:text="@string/last_withdrawal" />
 
 </RelativeLayout>
