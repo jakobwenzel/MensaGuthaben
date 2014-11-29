@@ -22,10 +22,14 @@
 
 package de.yazo_games.mensaguthaben.cardreader;
 
+import android.nfc.Tag;
+import android.nfc.tech.IsoDep;
 import android.util.Log;
 
 import com.codebutler.farebot.card.desfire.DesfireException;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
+
+import java.io.IOException;
 
 public class Readers implements ICardReader {
 	private static final String TAG = Readers.class.getName();
@@ -45,6 +49,54 @@ public class Readers implements ICardReader {
 				return val;
 		}
 		return null;
+	}
+
+
+	public ValueData readTag(Tag tag) throws DesfireException {
+		Log.i(TAG,"Loading tag");
+		IsoDep tech = IsoDep.get(tag);
+
+		try {
+			tech.connect();
+		} catch (IOException e) {
+			//Tag was removed. We fail silently.
+			e.printStackTrace();
+			return null;
+		}
+
+		try {
+			DesfireProtocol desfireTag = new DesfireProtocol(tech);
+
+
+			//Android has a Bug on Devices using a Broadcom NFC chip. See
+			// http://code.google.com/p/android/issues/detail?id=58773
+			//A Workaround is to connected to the tag, issue a dummy operation and then reconnect...
+			try {
+				desfireTag.selectApp(0);
+			}catch (ArrayIndexOutOfBoundsException e) {
+				//Exception occurs because the actual response is shorter than the error response
+				Log.i(TAG, "Broadcom workaround was needed");
+			}
+
+			tech.close();
+			tech.connect();
+
+			return Readers.getInstance().readCard(desfireTag);
+
+
+		} catch (IOException e) {
+			//This can only happen on tag close. we ignore this.
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (tech.isConnected())
+				try {
+					tech.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+
 	}
 
 	public static Readers getInstance() {

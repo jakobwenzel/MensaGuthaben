@@ -1,12 +1,49 @@
 <resources>
 
-	<!--
-		Base application theme for API 21+. This theme completely replaces
-		AppBaseTheme from BOTH res/values/styles.xml and
-		res/values-v11/styles.xml on API 21+ devices.
-	-->
-	<style name="AppBaseTheme" parent="android:Theme.Material.Light.DarkActionBar">
-		<!-- API 21 theme customizations can go here. -->
+	<!-- Application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<item name="windowActionBar">false</item>
+		<!-- Main theme colors -->
+		<!--   your app branding color for the app bar -->
+		<item name="colorPrimary">@color/material_deep_teal_500</item>
+		<!--   darker variant for the status bar and contextual app bars -->
+		<item name="colorPrimaryDark">#ff007a6c</item>
+		<!--   theme UI controls like checkboxes and text fields -->
+		<item name="colorAccent">@color/material_deep_teal_500</item>
+		<item name="android:windowContentTransitions">true</item>
+		<!-- specify enter and exit transitions -->
+		<item name="android:windowEnterTransition">@android:transition/explode</item>
+		<item name="android:windowExitTransition">@android:transition/explode</item>
+
+		<item name="android:windowAllowEnterTransitionOverlap">true</item>
+		<item name="android:windowAllowReturnTransitionOverlap">true</item>
+		<item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+		<item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
 	</style>
+
+
+	<!-- Application theme. -->
+	<style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+
+		<!-- Main theme colors -->
+		<!--   your app branding color for the app bar -->
+		<item name="colorPrimary">@color/material_deep_teal_500</item>
+		<!--   darker variant for the status bar and contextual app bars -->
+		<item name="colorPrimaryDark">#004a43</item>
+		<!--   theme UI controls like checkboxes and text fields -->
+		<item name="colorAccent">@color/material_deep_teal_500</item>
+		<item name="android:windowContentTransitions">true</item>
+		<!-- specify enter and exit transitions -->
+		<item name="android:windowEnterTransition">@android:transition/explode</item>
+		<item name="android:windowExitTransition">@android:transition/explode</item>
+
+		<item name="android:windowAllowEnterTransitionOverlap">true</item>
+		<item name="android:windowAllowReturnTransitionOverlap">true</item>
+		<item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+		<item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+	</style>
+
+
 
 </resources>

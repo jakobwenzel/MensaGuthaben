@@ -25,10 +25,6 @@ package com.codebutler.farebot;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.nfc.NfcAdapter;
-import android.os.Build;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -38,6 +34,9 @@ import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
 import org.w3c.dom.Node;
 
+import java.io.StringWriter;
+import java.util.List;
+
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -45,47 +44,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
-import java.util.List;
-
-import de.yazo_games.mensaguthaben.R;
 
 public class Utils {
 
 	private static final String TAG = Utils.class.getName();
-	private static AlertDialog dialog = null;;
-	public static void killDialog() {
-		dialog = null;
-	}
-    public static void checkNfcEnabled(final Activity activity, NfcAdapter adapter) {
-        if (adapter.isEnabled()) {
-            return;
-        }
-        
-        //We do not want two dialogs...
-        if (dialog!=null && dialog.isShowing()) return;
-        dialog = new AlertDialog.Builder(activity)
-            .setTitle(R.string.nfc_off)
-            .setMessage(R.string.turn_nfc_on)
-            .setCancelable(true)
-            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            })
-            .setNeutralButton(R.string.goto_settings, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-						Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
-						activity.startActivity(intent);
-					} else {
-						Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-						activity.startActivity(intent);
-					}
-                }
-            })
-            .show();
-    }
 
     public static void showError (final Activity activity, Exception ex) {
         Log.e(activity.getClass().getName(), ex.getMessage(), ex);

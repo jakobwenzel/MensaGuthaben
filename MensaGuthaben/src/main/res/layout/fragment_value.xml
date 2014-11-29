@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 xmlns:tools="http://schemas.android.com/tools"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent"
+			 android:orientation="vertical"
+			 android:gravity="center"
+			 tools:context="de.yazo_games.mensaguthaben.ValueFragment"
+			 android:padding="12dp">
+
+	<TextView
+		android:id="@+id/current"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/place_on_card"
+		android:gravity="center"
+		android:textSize="@dimen/textSize"
+		/>
+
+	<TextView
+		android:id="@+id/last"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="31dp"
+		android:gravity="center"
+		android:textSize="22sp"
+		android:visibility="gone"
+		tools:text="@string/last_withdrawal"
+		tools:visibility="visible"/>
+
+
+</LinearLayout>

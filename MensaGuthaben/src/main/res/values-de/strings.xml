@@ -4,7 +4,7 @@
     <string name="app_name">Mensa-Guthaben</string>
     <string name="action_about">Über Mensa-Guthaben</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="auf_mensakarte_legen_">Auf Mensakarte legen</string>
+    <string name="place_on_card">Auf Mensakarte legen</string>
     <string name="title_activity_about">Über Mensa-Guthaben</string>
     <string name="farebot">Diese App enthält Code von <a href="https://github.com/codebutler/farebot">farebot</a>, lizenziert unter GPL.</string>
     <string name="github">Der Quelltext ist auf <a href="https://github.com/antidau/MensaGuthaben">Github</a> verfügbar!</string>

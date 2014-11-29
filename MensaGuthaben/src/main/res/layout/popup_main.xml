@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:orientation="vertical"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  tools:context=".PopupActivity">
+
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:minHeight="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:elevation="10dp"
+		android:id="@+id/toolbar"
+
+		app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" android:id="@+id/main"
+		android:padding="20dp"></FrameLayout>
+
+</LinearLayout>

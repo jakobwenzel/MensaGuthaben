@@ -22,7 +22,6 @@
 
 package de.yazo_games.mensaguthaben;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,29 +33,34 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codebutler.farebot.Utils;
+import com.codebutler.farebot.NfcOffFragment;
 import com.codebutler.farebot.card.desfire.DesfireException;
-import com.codebutler.farebot.card.desfire.DesfireProtocol;
-
-import java.io.IOException;
 
 import de.yazo_games.mensaguthaben.cardreader.Readers;
 import de.yazo_games.mensaguthaben.cardreader.ValueData;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
+	private static final String VALUE_TAG = "Value Fragment";
+	public static final String EXTRA_VALUE = "valueData";
+	public static final String ACTION_FULLSCREEN = "de.yazo_games.mensaguthaben.Fullscreen";
+
 	private NfcAdapter mAdapter;
 	private PendingIntent mPendingIntent;
 	private IntentFilter[] mFilters;
 	private String[][] mTechLists;
     private IntentFilter mIntentFilter;
+
+	boolean mResumed = false;
 
 	private static final String TAG = MainActivity.class.getName();
 
@@ -64,61 +68,69 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
         	String action = intent.getAction();
-            if ("android.nfc.action.ADAPTER_STATE_CHANGED".equals(action)) {
+
+			if (NfcAdapter.ACTION_ADAPTER_STATE_CHANGED.equals(action)) {
             	updateNfcState();
             }
         }
     };
-	boolean wasDisabled;
-	
-	boolean lastNfcState = true;
 
-	private boolean cardLoaded = false;
-	private ValueData value;
+	private ValueFragment valueFragment;
 
 	public void updateNfcState() {
-		//Do nothing if no change
-		if (mAdapter.isEnabled()==lastNfcState) return;
-		lastNfcState = mAdapter.isEnabled();
 
-		TextView currentTv = (TextView) findViewById(R.id.current);
-		TextView lastTv = (TextView) findViewById(R.id.last);
-		if (mAdapter.isEnabled()) {
-			currentTv.setText(R.string.auf_mensakarte_legen_);
-			lastTv.setText("");
-		} else {
-			currentTv.setText(R.string.turn_nfc_on);
-			lastTv.setText("");
+		if (!mAdapter.isEnabled() && mResumed) {
+			NfcOffFragment f = new NfcOffFragment();
+			f.show(getSupportFragmentManager(), NfcOffFragment.TAG);
 		}
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 
 		Log.i(TAG,"activity started");
 
 
-        //Register or unregister for autostart (in case is has never been done)
-        Boolean autostart = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autostart",true);
+		FragmentManager fm = getSupportFragmentManager();
+
+
+		valueFragment = (ValueFragment) fm.findFragmentByTag(VALUE_TAG);
+		if (valueFragment ==null) {
+			valueFragment = new ValueFragment();
+		}
+		fm.beginTransaction().replace(R.id.main, valueFragment,VALUE_TAG).commit();
+
+		if (getIntent().getAction().equals(ACTION_FULLSCREEN)) {
+			ValueData valueData = (ValueData) getIntent().getSerializableExtra(EXTRA_VALUE);
+			valueFragment.setValueData(valueData);
+
+			setResult(0);
+			
+
+		}
+
+		Boolean autostart = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autostart",true);
         AutostartRegister.register(getPackageManager(),autostart);
 
+		Toolbar t = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(t);
+		ViewCompat.setTransitionName(t,"toolbar");
 
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
         mIntentFilter = new IntentFilter("android.nfc.action.ADAPTER_STATE_CHANGED");
-		
-		Utils.killDialog();
 
 
-		wasDisabled = !mAdapter.isEnabled();
 		// Create a generic PendingIntent that will be deliver to this activity.
 		// The NFC stack
 		// will fill in the intent with the details of the discovered tag before
 		// delivering to
 		// this activity.
 		mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-				getClass()), 0);
+				getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
 
 		// Setup an intent filter
 		IntentFilter tech = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
@@ -126,14 +138,15 @@ public class MainActivity extends Activity {
 		mTechLists = new String[][] { new String[] { IsoDep.class.getName(),
 				NfcA.class.getName() } };
 
-		if (savedInstanceState != null) {
-			cardLoaded = savedInstanceState.getBoolean("cardLoaded");
-			if (cardLoaded) {
-				value = (ValueData) savedInstanceState.getSerializable("value");
-				updateView(value);
-			}
+		if (getIntent().getAction().equals(ACTION_FULLSCREEN) &&!hasNewData) {
+			ValueData valueData = (ValueData) getIntent().getSerializableExtra(EXTRA_VALUE);
+			Log.w(TAG,"restoring data for fullscreen");
+			valueFragment.setValueData(valueData);
+
 		}
 	}
+
+	boolean hasNewData = false;
 
 	@Override
 	public void onNewIntent(Intent intent) {
@@ -142,7 +155,21 @@ public class MainActivity extends Activity {
 			Log.i(TAG,"Discovered tag with intent: " + intent);
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-			loadCard(tag);
+
+			try {
+				ValueData val = Readers.getInstance().readTag(tag);
+				Log.w(TAG,"Setting read data");
+				valueFragment.setValueData(val);
+				hasNewData = true;
+
+
+			} catch (DesfireException e) {
+				Toast.makeText(this,R.string.communication_fail,Toast.LENGTH_SHORT).show();
+			}
+		} else if (getIntent().getAction().equals(ACTION_FULLSCREEN)) {
+			ValueData valueData = (ValueData) getIntent().getSerializableExtra(EXTRA_VALUE);
+			valueFragment.setValueData(valueData);
+
 		}
 	}
 
@@ -153,145 +180,52 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private void toast(String text) {
-
-		Toast toast = Toast.makeText(getApplicationContext(), text,
-				Toast.LENGTH_LONG);
-		toast.show();
-		Log.i(TAG,"Showing toast: "+text);
-	}
-
-	public static String bytesToHex(byte[] bytes) {
-		final char[] hexArray = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-				'9', 'A', 'B', 'C', 'D', 'E', 'F' };
-		char[] hexChars = new char[bytes.length * 2];
-		int v;
-		for (int j = 0; j < bytes.length; j++) {
-			v = bytes[j] & 0xFF;
-			hexChars[j * 2] = hexArray[v >>> 4];
-			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-		}
-		return new String(hexChars);
-	}
-
-	private String moneyStr(int i) {
-		int euros = i / 100;
-		int cents = i % 100;
-
-		String centsStr = Integer.toString(cents);
-		if (cents<10) centsStr = "0"+centsStr;
-		return euros + "," + centsStr + "\u20AC"; //Last one is euro sign
-	}
-
-
-	private void updateView(ValueData value) {
-		this.cardLoaded = true;
-
-		String current = moneyStr(value.value);
-		TextView currentTv = (TextView) findViewById(R.id.current);
-		currentTv.setText(current);
-
-		TextView lastTv = (TextView) findViewById(R.id.last);
-		if (value.lastTransaction!=null) {
-			String last = moneyStr(value.lastTransaction);
-			lastTv.setText(getString(R.string.last_withdrawal)+" " + last);
-		} else {
-			lastTv.setVisibility(View.INVISIBLE);
-		}
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle bundle) {
-		bundle.putBoolean("cardLoaded", cardLoaded);
-		bundle.putSerializable("value", value);
-	}
-
-	private void  loadCard(Tag tag) {
-		Log.i(TAG,"Loading tag");
-		IsoDep tech = IsoDep.get(tag);
-
-		try {
-			tech.connect();
-		} catch (IOException e) {
-			//Tag was removed. We fail silently.
-			e.printStackTrace();
-			return;
-		}
-
-		try {
-			DesfireProtocol desfireTag = new DesfireProtocol(tech);
-
-
-			//Android has a Bug on Devices using a Broadcom NFC chip. See
-			// http://code.google.com/p/android/issues/detail?id=58773
-			//A Workaround is to connected to the tag, issue a dummy operation and then reconnect...
-			try {
-				desfireTag.selectApp(0);
-			}catch (ArrayIndexOutOfBoundsException e) {
-				//Exception occurs because the actual response is shorter than the error response
-				Log.i(TAG, "Broadcom workaround was needed");
-			}
-
-			tech.close();
-			tech.connect();
-
-			value = Readers.getInstance().readCard(desfireTag);
-			if (value!=null)
-				updateView(value);
-			else toast(getString(R.string.card_not_supported));
-
-		} catch (DesfireException ex) {
-			ex.printStackTrace();
-			toast(getString(R.string.communication_fail));
-		} catch (IOException e) {
-			//This can only happen on tag close. we ignore this.
-			e.printStackTrace();
-		} finally {
-			if (tech.isConnected())
-				try {
-					tech.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-
-	}
-
 	@Override
 	public void onResume() {
 
 		super.onResume();
+		mResumed = true;
         getApplicationContext().registerReceiver(mReceiver, mIntentFilter);
 
-		Utils.checkNfcEnabled(this,mAdapter);
+
+		updateNfcState();
 		
 		mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
 				mTechLists);
-		
-		
 
-		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+
+		/*if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
 			Log.i(TAG,"Started by tag discovery");
 			onNewIntent(getIntent());
-
-		}
+		} else */
 	}
-	
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mResumed = false;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId()==R.id.action_about) {
             Intent myIntent = new Intent(this, AboutActivity.class);
-            startActivityForResult(myIntent, 0);
+            startActivity(myIntent);
 			return true;
 		}
 
         if (item.getItemId()==R.id.action_settings) {
             Intent myIntent = new Intent(this, SettingsActivity.class);
-            startActivityForResult(myIntent, 0);
+            startActivity(myIntent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		valueFragment = null;
+	}
 }

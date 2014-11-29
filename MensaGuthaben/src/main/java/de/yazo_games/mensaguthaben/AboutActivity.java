@@ -22,17 +22,17 @@
 
 package de.yazo_games.mensaguthaben;
 
-import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends ActionBarActivity {
 
     private void makeLinkClickable(int id) {
 
@@ -72,7 +72,7 @@ public class AboutActivity extends Activity {
 	 */
 	private void setupActionBar() {
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
 

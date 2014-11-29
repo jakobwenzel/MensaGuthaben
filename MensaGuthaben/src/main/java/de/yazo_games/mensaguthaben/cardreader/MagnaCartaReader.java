@@ -24,9 +24,7 @@ package de.yazo_games.mensaguthaben.cardreader;
 
 import android.util.Log;
 
-import com.codebutler.farebot.Utils;
 import com.codebutler.farebot.card.desfire.DesfireException;
-import com.codebutler.farebot.card.desfire.DesfireFileSettings;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
 public class MagnaCartaReader implements ICardReader {
@@ -39,16 +37,10 @@ public class MagnaCartaReader implements ICardReader {
 		//We don't want to use getFileSettings as they are doing some weird stuff with the fileType
 		try {
 			card.selectApp(appId);
-		} catch (DesfireException e) {
-			Log.w(TAG,"App not found");
-			Log.w(TAG, e);
-			return null;
-		}
 
-		//For some reason we can't use getFileList either, because the card answers with an
-		//authentication error
+			//For some reason we can't use getFileList either, because the card answers with an
+			//authentication error
 
-		try {
 			byte[] data = card.readFile(fileId);
 
 			int low = ((int) data[7]) & 0xFF;
@@ -58,8 +50,7 @@ public class MagnaCartaReader implements ICardReader {
 			return new ValueData(value,null);
 
 		} catch (DesfireException e) {
-			Log.w(TAG,"Exception while reading tag",e);
-			Log.w(TAG, e);
+			Log.w(TAG,"Exception while reading tag");
 			return null;
 		}
 	}
