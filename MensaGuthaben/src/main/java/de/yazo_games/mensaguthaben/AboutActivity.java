@@ -30,6 +30,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.TextView;
 
 public class AboutActivity extends ActionBarActivity {
@@ -54,6 +55,9 @@ public class AboutActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		supportRequestWindowFeature(Window.FEATURE_ACTION_BAR);
+
 		setContentView(R.layout.activity_about);
 		// Show the Up button in the action bar.
 		setupActionBar();
