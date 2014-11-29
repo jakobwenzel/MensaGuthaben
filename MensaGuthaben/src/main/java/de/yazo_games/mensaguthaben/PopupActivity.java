@@ -50,16 +50,25 @@ public class PopupActivity extends FragmentActivity {
 						intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
 
 						Log.w(TAG,findViewById(R.id.current).toString());
-						ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this,
-								Pair.create(findViewById(R.id.current), "current"),
-								Pair.create(findViewById(R.id.last), "last"),
-								Pair.create(findViewById(R.id.toolbar), "toolbar")
-						);
+
+                        ActivityOptionsCompat options;
+                        if (valueFragment.getValueData()!=null) {
+                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this,
+                                    Pair.create(findViewById(R.id.current), "current"),
+                                    Pair.create(findViewById(R.id.last), "last"),
+                                    Pair.create(findViewById(R.id.toolbar), "toolbar")
+                            );
+                        } else {
+                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this,
+                                    Pair.create(findViewById(R.id.current), "current"),
+                                    Pair.create(findViewById(R.id.toolbar), "toolbar")
+                            );
+                        }
 
 						ActivityCompat.startActivityForResult(PopupActivity.this, intent,0, options.toBundle());
 						//ActivityCompat.startActivity(PopupActivity.this,intent,
 						//		ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this).toBundle());
-						finish();
+						//finish();
 						return true;
 					default:
 						return false;
@@ -86,7 +95,13 @@ public class PopupActivity extends FragmentActivity {
 		}
 	}
 
-	@Override
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        finish();
+    }
+
+    @Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 
