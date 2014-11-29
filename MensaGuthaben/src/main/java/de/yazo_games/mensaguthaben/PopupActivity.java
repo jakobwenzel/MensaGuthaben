@@ -65,7 +65,7 @@ public class PopupActivity extends FragmentActivity {
                             );
                         }
 
-						ActivityCompat.startActivityForResult(PopupActivity.this, intent,0, options.toBundle());
+						ActivityCompat.startActivity(PopupActivity.this, intent, options.toBundle());
 						//ActivityCompat.startActivity(PopupActivity.this,intent,
 						//		ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this).toBundle());
 						//finish();
@@ -95,11 +95,11 @@ public class PopupActivity extends FragmentActivity {
 		}
 	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        finish();
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        finish();
+//    }
 
     @Override
 	protected void onNewIntent(Intent intent) {
