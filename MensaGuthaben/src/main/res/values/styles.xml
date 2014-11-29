@@ -15,7 +15,7 @@
 
 	<!-- Application theme. -->
 	<style name="AppBaseTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
-
+		<item name="windowActionBar">false</item>
 		<!-- Main theme colors -->
 		<!--   your app branding color for the app bar -->
 		<item name="colorPrimary">@color/material_deep_teal_500</item>

@@ -1,18 +1,20 @@
 package de.yazo_games.mensaguthaben;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codebutler.farebot.card.desfire.DesfireException;
@@ -23,7 +25,7 @@ import de.yazo_games.mensaguthaben.cardreader.ValueData;
 /**
  * Created by wenzel on 28.11.14.
  */
-public class PopupActivity extends FragmentActivity {
+public class PopupActivity extends ActionBarActivity {
 
 	private static String TAG = PopupActivity.class.getSimpleName();
 
@@ -39,42 +41,7 @@ public class PopupActivity extends FragmentActivity {
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.app_name);
-		toolbar.getMenu().add(Menu.NONE,R.id.fullscreen,Menu.NONE,R.string.fullscreen).setIcon(R.drawable.ic_action_full_screen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem menuItem) {
-				switch (menuItem.getItemId()) {
-					case R.id.fullscreen:
-						Intent intent = new Intent(PopupActivity.this, MainActivity.class);
-						intent.setAction(MainActivity.ACTION_FULLSCREEN);
-						intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
-
-						Log.w(TAG,findViewById(R.id.current).toString());
-
-                        ActivityOptionsCompat options;
-                        if (valueFragment.getValueData()!=null) {
-                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this,
-                                    Pair.create(findViewById(R.id.current), "current"),
-                                    Pair.create(findViewById(R.id.last), "last"),
-                                    Pair.create(findViewById(R.id.toolbar), "toolbar")
-                            );
-                        } else {
-                            options = ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this,
-                                    Pair.create(findViewById(R.id.current), "current"),
-                                    Pair.create(findViewById(R.id.toolbar), "toolbar")
-                            );
-                        }
-
-						ActivityCompat.startActivity(PopupActivity.this, intent, options.toBundle());
-						//ActivityCompat.startActivity(PopupActivity.this,intent,
-						//		ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this).toBundle());
-						//finish();
-						return true;
-					default:
-						return false;
-				}
-			}
-		});
+		setSupportActionBar(toolbar);
 
 		Log.i(TAG, "activity started");
 
@@ -101,7 +68,67 @@ public class PopupActivity extends FragmentActivity {
 //        finish();
 //    }
 
-    @Override
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, R.id.fullscreen, Menu.NONE, R.string.fullscreen).setIcon(R.drawable.ic_action_full_screen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.fullscreen:
+				Intent intent = new Intent(PopupActivity.this, MainActivity.class);
+				intent.setAction(MainActivity.ACTION_FULLSCREEN);
+				intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
+
+				if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+					animateActivity21(intent);
+				} else if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN) {
+					animateActivity16(intent);
+				} else {
+					startActivity(intent);
+					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+				}
+
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@TargetApi(21)
+	private void animateActivity21(Intent intent) {
+		ActivityOptions options;
+		if (valueFragment.getValueData()!=null) {
+			options = ActivityOptions.makeSceneTransitionAnimation(PopupActivity.this,
+					Pair.create(findViewById(R.id.current), "current"),
+					Pair.create(findViewById(R.id.last), "last"),
+					Pair.create(findViewById(R.id.toolbar), "toolbar")
+			);
+		} else {
+			options = ActivityOptions.makeSceneTransitionAnimation(PopupActivity.this,
+					Pair.create(findViewById(R.id.current), "current"),
+					Pair.create(findViewById(R.id.toolbar), "toolbar")
+			);
+		}
+
+		startActivity(intent, options.toBundle());
+		//ActivityCompat.startActivity(PopupActivity.this,intent,
+		//		ActivityOptionsCompat.makeSceneTransitionAnimation(PopupActivity.this).toBundle());
+		//finish();
+	}
+
+	@TargetApi(16)
+	private void animateActivity16(Intent intent) {
+		View root = findViewById(R.id.popupRoot);
+
+		ActivityOptions options = ActivityOptions.makeScaleUpAnimation(root,root.getLeft(), root.getTop(), root.getWidth(), root.getHeight());
+		startActivity(intent, options.toBundle());
+	}
+
+	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 
