@@ -1,6 +1,6 @@
 gen
 *.class
-MensaGuthaben/build
+build
 local.properties
 .gradle
 *.iml
