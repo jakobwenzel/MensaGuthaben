@@ -22,5 +22,6 @@ The App has been successfully tested on cards used at various universities:
 * Uni Leipzig
 * Uni Stuttgart
 * Uni Würzburg
+* Hochschule Zittau/Görlitz
 
 Now available on Google Play: https://play.google.com/store/apps/details?id=de.yazo_games.mensaguthaben
