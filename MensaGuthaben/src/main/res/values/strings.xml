@@ -17,7 +17,6 @@
     <string name="communication_fail">Communication with Card failed</string>
     <string name="website">If you test the app on cards from a different university, I\'d love to hear about the results. <a href="mailto:jakobwenzel92@gmail.com">Send me a Mail</a> or <a href="http://mensaguthaben.yazo-games.de/andere-unis/">leave a comment on my website</a>!</string>
     <string name="version">Version</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="fullscreen">Fullscreen</string>
 
 </resources>

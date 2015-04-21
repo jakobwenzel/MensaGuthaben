@@ -62,17 +62,17 @@ public class PopupActivity extends ActionBarActivity {
 		}
 	}
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        finish();
-//    }
-
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, R.id.fullscreen, Menu.NONE, R.string.fullscreen).setIcon(R.drawable.ic_action_full_screen).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return true;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (ValueHolder.data!=null)
+			valueFragment.setValueData(ValueHolder.data);
 	}
 
 	@Override
@@ -98,9 +98,11 @@ public class PopupActivity extends ActionBarActivity {
 		}
 	}
 
+
 	@TargetApi(21)
 	private void animateActivity21(Intent intent) {
 		ActivityOptions options;
+		//TODO check what happens if last is empty
 		if (valueFragment.getValueData()!=null) {
 			options = ActivityOptions.makeSceneTransitionAnimation(PopupActivity.this,
 					Pair.create(findViewById(R.id.current), "current"),

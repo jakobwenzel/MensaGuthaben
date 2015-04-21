@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void onNewIntent(Intent intent) {
-		Log.i(TAG,"Foreground dispatch");
+		Log.i(TAG, "Foreground dispatch");
 		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
 			Log.i(TAG,"Discovered tag with intent: " + intent);
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -162,7 +162,6 @@ public class MainActivity extends ActionBarActivity {
 				valueFragment.setValueData(val);
 				hasNewData = true;
 
-
 			} catch (DesfireException e) {
 				Toast.makeText(this,R.string.communication_fail,Toast.LENGTH_SHORT).show();
 			}
@@ -172,14 +171,6 @@ public class MainActivity extends ActionBarActivity {
 
 		}
 	}
-
-//    @Override
-//    public void onBackPressed() {
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            finishAndRemoveTask();
-//        } else
-//            super.onBackPressed();
-//    }
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,7 +185,6 @@ public class MainActivity extends ActionBarActivity {
 		super.onResume();
 		mResumed = true;
         getApplicationContext().registerReceiver(mReceiver, mIntentFilter);
-
 
 		updateNfcState();
 		

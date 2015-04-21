@@ -32,7 +32,6 @@
 			android:name="de.yazo_games.mensaguthaben.PopupActivity"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.Dialog"
-			android:noHistory="true"
 			>
 		</activity>
 

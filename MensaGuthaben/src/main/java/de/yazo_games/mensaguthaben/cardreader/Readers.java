@@ -31,6 +31,8 @@ import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
 import java.io.IOException;
 
+import de.yazo_games.mensaguthaben.ValueHolder;
+
 public class Readers implements ICardReader {
 	private static final String TAG = Readers.class.getName();
 	private static Readers instance;
@@ -81,7 +83,9 @@ public class Readers implements ICardReader {
 			tech.close();
 			tech.connect();
 
-			return Readers.getInstance().readCard(desfireTag);
+			ValueData val = Readers.getInstance().readCard(desfireTag);
+			ValueHolder.data=val;
+			return val;
 
 
 		} catch (IOException e) {

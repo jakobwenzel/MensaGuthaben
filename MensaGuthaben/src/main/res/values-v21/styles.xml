@@ -2,8 +2,8 @@
 
 	<!-- Application theme. -->
 	<style name="AppTheme" parent="AppBaseTheme">
-		<item name="android:windowContentTransitions">true</item>
-		<!-- specify enter and exit transitions -->
+		<!--<item name="android:windowContentTransitions">true</item>
+		<!- specify enter and exit transitions -
 		<item name="android:windowEnterTransition">@android:transition/explode</item>
 		<item name="android:windowExitTransition">@android:transition/explode</item>
 
@@ -11,21 +11,21 @@
 		<item name="android:windowAllowReturnTransitionOverlap">true</item>
 		<item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
 		<item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-
+-->
 	</style>
 
 
 	<!-- Application theme. -->
 	<style name="AppTheme.Dialog" parent="AppBaseTheme.Dialog">
-		<item name="android:windowContentTransitions">true</item>
-		<!-- specify enter and exit transitions -->
+		<!--<item name="android:windowContentTransitions">true</item>
+		<!- specify enter and exit transitions -
 		<item name="android:windowEnterTransition">@android:transition/explode</item>
 		<item name="android:windowExitTransition">@android:transition/explode</item>
 
 		<item name="android:windowAllowEnterTransitionOverlap">true</item>
 		<item name="android:windowAllowReturnTransitionOverlap">true</item>
 		<item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
-		<item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+		<item name="android:windowSharedElementExitTransition">@android:transition/move</item>-->
 	</style>
 
 
