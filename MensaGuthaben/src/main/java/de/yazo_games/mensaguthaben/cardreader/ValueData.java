@@ -29,11 +29,11 @@ import java.io.Serializable;
  */
 public class ValueData implements Serializable {
 	/**
-	 * Current value on card, in Euro cents.
+	 * Current value on card, in tenths of Euro cents.
 	 */
 	public int value;
 	/**
-	 * Last transaction, in Euro cents. null if not supported by card.
+	 * Last transaction, in tenths of Euro cents. null if not supported by card.
 	 */
 	public Integer lastTransaction;
 

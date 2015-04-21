@@ -47,7 +47,7 @@ public class MagnaCartaReader implements ICardReader {
 			int hi = ((int) data[6]) & 0xFF;
 
 			int value = hi<<8 | low;
-			return new ValueData(value,null);
+			return new ValueData(value*10,null);
 
 		} catch (DesfireException e) {
 			Log.w(TAG,"Exception while reading tag");

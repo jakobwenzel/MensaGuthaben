@@ -44,11 +44,16 @@ public class ValueFragment extends Fragment {
 	}
 
 	private String moneyStr(int i) {
-		int euros = i / 100;
-		int cents = i % 100;
+		int euros = i / 1000;
+		int cents = (i/10) % 100;
+		int tenthsCent = i % 10;
 
 		String centsStr = Integer.toString(cents);
 		if (cents<10) centsStr = "0"+centsStr;
+
+		if (tenthsCent!=0)
+			centsStr += tenthsCent;
+
 		return euros + "," + centsStr + "\u20AC"; //Last one is euro sign
 	}
 

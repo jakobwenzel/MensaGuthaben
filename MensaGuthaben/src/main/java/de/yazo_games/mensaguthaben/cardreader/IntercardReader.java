@@ -47,8 +47,7 @@ public class IntercardReader implements ICardReader {
 			int data = 0;
 			try {
 				data = card.readValue(fileId);
-				//Values are saved in tenths of cents, so divide by ten...
-				return new ValueData(data/10,value.value/10);
+				return new ValueData(data,value.value);
 			} catch (Exception e) {
 				Log.w(TAG,"Exception while trying to read value",e);
 				return null;
