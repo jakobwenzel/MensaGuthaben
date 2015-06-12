@@ -7,6 +7,7 @@ The App has been successfully tested on cards used at various universities:
 
 * Uni Bamberg
 * Uni Bayreuth (only Print-/Copy-balance visible)
+* Uni Bielefeld (only new cards)
 * Uni Bochum (only newer cards)
 * TU Braunschweig
 * Uni Bremen
