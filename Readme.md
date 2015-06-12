@@ -7,7 +7,7 @@ The App has been successfully tested on cards used at various universities:
 
 * Uni Bamberg
 * Uni Bayreuth (only Print-/Copy-balance visible)
-* Uni Bielefeld (only new cards)
+* Uni Bielefeld (only newer cards)
 * Uni Bochum (only newer cards)
 * TU Braunschweig
 * Uni Bremen
@@ -19,10 +19,11 @@ The App has been successfully tested on cards used at various universities:
 * Uni Heidelberg
 * TU Ilmenau
 * HS Koblenz
+* FH Köln
 * Uni Köln
 * Uni Leipzig
 * Uni Stuttgart
 * Uni Würzburg
-* Hochschule Zittau/Görlitz
+* HS Zittau/Görlitz
 
 Now available on Google Play: https://play.google.com/store/apps/details?id=de.yazo_games.mensaguthaben
