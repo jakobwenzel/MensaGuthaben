@@ -16,12 +16,14 @@ The App has been successfully tested on cards used at various universities:
 * h_da Darmstadt
 * TU Dresden Emeal
 * HS Hannover
+* Hasso-Plattner-Institut
 * Uni Heidelberg
 * TU Ilmenau
 * HS Koblenz
 * FH Köln
 * Uni Köln
 * Uni Leipzig
+* Uni Potsdam
 * Uni Stuttgart
 * Uni Würzburg
 * HS Zittau/Görlitz
