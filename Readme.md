@@ -22,6 +22,7 @@ The App has been successfully tested on cards used at various universities:
 * HS Koblenz
 * FH Köln
 * Uni Köln
+* HTWG + Uni Konstanz
 * Uni Leipzig
 * Uni Potsdam
 * Uni Stuttgart
