@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Locale;
+import java.util.Currency;
+
 import de.yazo_games.mensaguthaben.cardreader.ValueData;
 
 public class ValueFragment extends Fragment {
@@ -44,17 +47,12 @@ public class ValueFragment extends Fragment {
 	}
 
 	private String moneyStr(int i) {
-		int euros = i / 1000;
-		int cents = (i/10) % 100;
-		int tenthsCent = i % 10;
+		Locale germany = Locale.GERMANY;
+		String currencySymbol = Currency.getInstance(germany).getSymbol();
 
-		String centsStr = Integer.toString(cents);
-		if (cents<10) centsStr = "0"+centsStr;
+		float amount = ((float) i) / 1000;
 
-		if (tenthsCent!=0)
-			centsStr += tenthsCent;
-
-		return euros + "," + centsStr + "\u20AC"; //Last one is euro sign
+		return String.format(germany, "%.2f%s", amount, currencySymbol);
 	}
 
 
