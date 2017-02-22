@@ -29,4 +29,40 @@ android {
         minSdkVersion 14
         targetSdkVersion 25
     }
+    
+    signingConfigs {
+        release {
+            // We can leave these in environment variables
+            storeFile file(System.getenv("KEYSTORE") ?: "keystore")
+            keyAlias System.getenv("KEY_ALIAS") ?: "jakobwenzel"
+
+            // These two lines make gradle believe that the signingConfigs
+            // section is complete. Without them, tasks like installRelease
+            // will not be available!
+            storePassword "notYourRealPassword"
+            keyPassword "notYourRealPassword"
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
+
+task askForPassword {
+    doLast {
+        def storePw = PasswordPrompt.readPassword("Keystore password") ?: "invalid" //If it's null, gradle complains
+
+
+        android.signingConfigs.release.storePassword = storePw
+        android.signingConfigs.release.keyPassword = storePw
+    }
+}
+
+tasks.whenTaskAdded { theTask ->
+    if (theTask.name.equals("packageRelease")) {
+        theTask.dependsOn "askForPassword"
+    }
+}
+

@@ -8,3 +8,4 @@ local.properties
 *.apk
 _site
 *.lock
+keystore
