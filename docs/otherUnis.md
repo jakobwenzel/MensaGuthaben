@@ -32,6 +32,7 @@ Universities that cannot be supported
 -------------------------------------
 Dumps of cards of these universities have been analyzed and no differences have been found:
 
+* FH & Uni Aachen
 * TU Berlin
 
 If your university is on this list
