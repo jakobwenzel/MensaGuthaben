@@ -7,7 +7,7 @@
     <string name="place_on_card">Auf Mensakarte legen</string>
     <string name="title_activity_about">Über Mensa-Guthaben</string>
     <string name="farebot">Diese App enthält Code von <a href="https://github.com/codebutler/farebot">farebot</a>, lizenziert unter GPL.</string>
-    <string name="github">Der Quelltext ist auf <a href="https://github.com/antidau/MensaGuthaben">Github</a> verfügbar!</string>
+    <string name="github">Der Quelltext ist auf <a href="https://github.com/jakobwenzel/MensaGuthaben">Github</a> verfügbar!</string>
 
     <string name="nfc_off">NFC ist ausgeschaltet</string>
     <string name="turn_nfc_on">Bitte NFC einschalten</string>
@@ -16,7 +16,9 @@
     <string name="card_not_supported">Karte nicht unterstützt</string>
     <string name="communication_fail">Kommunikation mit Karte fehlgeschlagen</string>
 
-    <string name="website">Wenn du die App an Karten von einer anderen Uni ausprobierst würde ich mich über Rückmeldungen freuen. Schreib mir <a href="mailto:jakobwenzel92@gmail.com">per Mail</a> oder <a href="https://github.com/jakobwenzel/MensaGuthaben/issues">auf Github</a>!</string>
+    <string name="website">Wenn du die App an Karten von einer anderen Uni ausprobierst würde ich mich über Rückmeldungen freuen. Schreib mir <a href="mailto:jakobwenzel92+app@gmail.com">per Mail</a> oder <a href="https://github.com/jakobwenzel/MensaGuthaben/issues">auf Github</a>!</string>
     <string name="version">Version</string>
     <string name="fullscreen">Vollbild</string>
+    <string name="debuggingButton">Logmitteilungen per E-Mail schicken</string>
+    <string name="debuggingExplanation">Wenn die App aus irgendeinem Grund nicht funktioniert, drück diesen Knopf um mir die Logmitteilungen per Mail zu schicken:</string>
 </resources>

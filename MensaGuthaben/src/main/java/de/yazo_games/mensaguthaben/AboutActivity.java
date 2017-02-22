@@ -22,16 +22,25 @@
 
 package de.yazo_games.mensaguthaben;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
 
 public class AboutActivity extends ActionBarActivity {
 
@@ -69,6 +78,36 @@ public class AboutActivity extends ActionBarActivity {
         makeLinkClickable(R.id.tvFarebot);
         makeLinkClickable(R.id.tvSource);
         makeLinkClickable(R.id.tvWebsite);
+
+		Button b = (Button) findViewById(R.id.bDebug);
+		b.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// save logcat in file
+				File outputFile = new File(getApplicationContext().getExternalCacheDir(),
+						"logcat.txt");
+				try {
+					Runtime.getRuntime().exec(
+							"logcat -d -f " + outputFile.getAbsolutePath()).waitFor();
+
+                    //send file using email
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    // Set type to "email"
+                    emailIntent.setType("vnd.android.cursor.dir/email");
+                    String to[] = {"jakobwenzel92+app@gmail.com"};
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+                    // the attachment
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(outputFile.getAbsoluteFile()));
+                    // the mail subject
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                    startActivity(Intent.createChooser(emailIntent , "Send email..."));
+				} catch (IOException | InterruptedException e) {
+                    Log.w("Sendlog", "failed", e);
+                    Toast.makeText(getApplicationContext(), "Failed to send log: "+e.getMessage(),Toast.LENGTH_LONG).show();
+				}
+
+			}
+		});
 	}
 
 	/**

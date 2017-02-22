@@ -55,4 +55,23 @@
         android:text="@string/github"
 		android:gravity="center_horizontal"/>
 
+	<TextView
+			android:id="@+id/tvDebugging"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/tvSource"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="38dp"
+			android:text="@string/debuggingExplanation"
+			android:gravity="center_horizontal"/>
+
+	<Button
+			android:id="@+id/bDebug"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/tvDebugging"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="38dp"
+			android:text="@string/debuggingButton"/>
+
 </RelativeLayout>

@@ -15,8 +15,12 @@
     <string name="last_withdrawal">Last withdrawal:</string>
     <string name="card_not_supported">Card not supported</string>
     <string name="communication_fail">Communication with Card failed</string>
-    <string name="website">If you test the app on cards from a different university, I\'d love to hear about the results. Write me <a href="mailto:jakobwenzel92@gmail.com">a Mail</a> or <a href="https://github.com/jakobwenzel/MensaGuthaben/issues">via Github</a>!</string>
+    <string name="website">If you test the app on cards from a different university, I\'d love to hear about the results. Write me <a href="mailto:jakobwenzel92+app@gmail.com">a Mail</a> or <a href="https://github.com/jakobwenzel/MensaGuthaben/issues">via Github</a>!</string>
     <string name="version">Version</string>
     <string name="fullscreen">Fullscreen</string>
+    <string name="debuggingButton">Send Log messages via Email</string>
+    <string name="debuggingExplanation">If the app does not work for some reason, press this button to send me the log
+        messages:
+    </string>
 
 </resources>
