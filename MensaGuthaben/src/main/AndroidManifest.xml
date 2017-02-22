@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.yazo_games.mensaguthaben"
     android:installLocation="auto"
-    android:versionCode="15"
+    android:versionCode="16"
     android:versionName="1.2.1" >
 
     <uses-permission android:name="android.permission.NFC" />
