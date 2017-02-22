@@ -25,6 +25,7 @@ The App has been successfully tested on cards used at various universities:
 * HAW Hamburg
 * HS Hannover
 * Uni Heidelberg
+* Uni Hohenheim (only newer cards)
 * TU Ilmenau
 * HS Koblenz
 * Uni Koblenz
