@@ -43,5 +43,6 @@ The App has been successfully tested on cards used at various universities:
 * FH Würzburg
 * Uni Würzburg
 * HS Zittau/Görlitz
+* Technische Hochschule Mittelhessen (display only printerbalance! Mensabalance is saved elsewhere on this card)
 
 [You can help to support your university as well](otherUnis.md)
