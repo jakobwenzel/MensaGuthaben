@@ -18,5 +18,6 @@
     <string name="website">If you test the app on cards from a different university, I\'d love to hear about the results. Write me <a href="mailto:jakobwenzel92@gmail.com">a Mail</a> or <a href="https://github.com/jakobwenzel/MensaGuthaben/issues">via Github</a>!</string>
     <string name="version">Version</string>
     <string name="fullscreen">Fullscreen</string>
+    <string name="send_to_myexpenses">Send to MyExpenses</string>
 
 </resources>
