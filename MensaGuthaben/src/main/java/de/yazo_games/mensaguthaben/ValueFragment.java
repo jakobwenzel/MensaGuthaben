@@ -18,6 +18,7 @@ public class ValueFragment extends Fragment {
 	private ValueData valueData;
 	private TextView tvCurrentValue;
 	private TextView tvLastValue;
+	private TextView tvCardId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,11 @@ public class ValueFragment extends Fragment {
 
 		tvCurrentValue = ((TextView) v.findViewById(R.id.current));
 		tvLastValue = (TextView) v.findViewById(R.id.last);
+		tvCardId = (TextView) v.findViewById(R.id.card_id);
 
 		ViewCompat.setTransitionName(tvCurrentValue, "current");
 		ViewCompat.setTransitionName(tvLastValue, "last");
+		ViewCompat.setTransitionName(tvCardId, "last");
 
 		if (savedInstanceState!=null) {
 			valueData = (ValueData) savedInstanceState.getSerializable(VALUE);
@@ -60,10 +63,19 @@ public class ValueFragment extends Fragment {
 		if (valueData==null) {
 			tvCurrentValue.setText(getString(R.string.place_on_card));
 			tvLastValue.setVisibility(View.GONE);
+			tvCardId.setVisibility(View.GONE);
 		} else {
 
 			String current = moneyStr(valueData.value);
 			tvCurrentValue.setText(current);
+
+			if(valueData.cardId == null) {
+				tvCardId.setVisibility(View.GONE);
+			} else {
+				tvCardId.setText(getString(R.string.card_id) + " " + fromByteArray(valueData.cardId));
+				tvCardId.setVisibility(View.VISIBLE);
+			}
+
 			if (valueData.lastTransaction != null) {
 				String last = moneyStr(valueData.lastTransaction);
 				tvLastValue.setText(getString(R.string.last_withdrawal) + " " + last);
@@ -72,6 +84,14 @@ public class ValueFragment extends Fragment {
 				tvLastValue.setVisibility(View.GONE);
 			}
 		}
+	}
+
+	static long fromByteArray(byte[] bytes) {
+		long value = 0;
+		for (int i = 0; i < bytes.length; i++) {
+			value += ((long) bytes[i] & 0xffL) << (8 * i);
+		}
+		return value;
 	}
 
 	@Override

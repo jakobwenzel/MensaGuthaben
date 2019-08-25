@@ -13,6 +13,7 @@
     <string name="turn_nfc_on">Bitte NFC einschalten</string>
     <string name="goto_settings">Zu Einstellungen wechseln</string>
     <string name="last_withdrawal">Letzte Abbuchung:</string>
+    <string name="card_id">Karten-ID:</string>
     <string name="card_not_supported">Karte nicht unterstützt</string>
     <string name="communication_fail">Kommunikation mit Karte fehlgeschlagen</string>
 
