@@ -157,7 +157,6 @@ public class MainActivity extends ActionBarActivity {
 
 			try {
 				ValueData val = Readers.getInstance().readTag(tag);
-				val.cardId = tag.getId();
 				Log.w(TAG,"Setting read data");
 				valueFragment.setValueData(val);
 				hasNewData = true;

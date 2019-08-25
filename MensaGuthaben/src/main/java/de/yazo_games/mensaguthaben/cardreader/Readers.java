@@ -84,6 +84,7 @@ public class Readers implements ICardReader {
 			tech.connect();
 
 			ValueData val = Readers.getInstance().readCard(desfireTag);
+			val.cardId = tag.getId();
 			ValueHolder.data=val;
 			return val;
 
