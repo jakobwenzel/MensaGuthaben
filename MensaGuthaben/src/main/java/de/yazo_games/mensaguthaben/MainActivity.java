@@ -155,9 +155,9 @@ public class MainActivity extends ActionBarActivity {
 			Log.i(TAG,"Discovered tag with intent: " + intent);
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-
 			try {
 				ValueData val = Readers.getInstance().readTag(tag);
+				val.cardId = tag.getId();
 				Log.w(TAG,"Setting read data");
 				valueFragment.setValueData(val);
 				hasNewData = true;

@@ -29,14 +29,25 @@ import java.io.Serializable;
  */
 public class ValueData implements Serializable {
 	/**
+	 * Card ID
+	 */
+	public byte[] cardId;
+
+	/**
 	 * Current value on card, in tenths of Euro cents.
 	 */
 	public int value;
+
 	/**
 	 * Last transaction, in tenths of Euro cents. null if not supported by card.
 	 */
 	public Integer lastTransaction;
 
+	public ValueData(byte[] cardId, int value, Integer lastTransaction) {
+		this.cardId = cardId;
+		this.value = value;
+		this.lastTransaction = lastTransaction;
+	}
 	public ValueData(int value, Integer lastTransaction) {
 		this.value = value;
 		this.lastTransaction = lastTransaction;
