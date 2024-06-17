@@ -1,23 +1,25 @@
 buildscript {
 
     repositories {
-        jcenter()
+        mavenCentral()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:7.3.0'
     }
 }
 apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
-	compile 'com.android.support:support-v4:21.0.+'
-	compile 'com.android.support:appcompat-v7:21.0.+'
-	compile 'org.apache.commons:commons-lang3:3.1'
+    implementation 'com.android.support:support-v4:21.0.+'
+    implementation 'com.android.support:appcompat-v7:21.0.+'
+    implementation 'org.apache.commons:commons-lang3:3.1'
 
 }
 
