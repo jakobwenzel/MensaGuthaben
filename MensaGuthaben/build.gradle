@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.5.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -25,7 +25,6 @@ dependencies {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 14
@@ -50,6 +49,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'de.yazo_games.mensaguthaben'
 }
 
 task askForPassword {
