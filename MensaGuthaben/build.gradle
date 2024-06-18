@@ -24,11 +24,11 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 34
     }
     
     signingConfigs {
@@ -52,9 +52,10 @@ android {
     namespace 'de.yazo_games.mensaguthaben'
 }
 
-task askForPassword {
+tasks.register('askForPassword') {
     doLast {
-        def storePw = PasswordPrompt.readPassword("Keystore password") ?: "invalid" //If it's null, gradle complains
+        def storePw = PasswordPrompt.readPassword("Keystore password") ?: "invalid"
+        //If it's null, gradle complains
 
 
         android.signingConfigs.release.storePassword = storePw
@@ -62,7 +63,7 @@ task askForPassword {
     }
 }
 
-tasks.whenTaskAdded { theTask ->
+tasks.configureEach { theTask ->
     if (theTask.name.equals("packageRelease")) {
         theTask.dependsOn "askForPassword"
     }
