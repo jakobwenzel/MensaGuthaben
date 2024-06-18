@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     android:versionCode="15"
-    android:versionName="1.2.1" >
+    android:versionName="1.2.1">
 
     <uses-permission android:name="android.permission.NFC" />
 
@@ -11,17 +11,16 @@
         android:required="true" />
 
 
-	<application
+    <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:persistent="false"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="de.yazo_games.mensaguthaben.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-			android:launchMode="singleTop">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,17 +28,15 @@
             </intent-filter>
 
         </activity>
-		<activity
-			android:name="de.yazo_games.mensaguthaben.PopupActivity"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.Dialog"
-			>
-		</activity>
+        <activity
+            android:name="de.yazo_games.mensaguthaben.PopupActivity"
+
+            android:theme="@style/AppTheme.Dialog"></activity>
 
         <activity
             android:name="de.yazo_games.mensaguthaben.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="de.yazo_games.mensaguthaben.MainActivity" >
+            android:parentActivityName="de.yazo_games.mensaguthaben.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.yazo_games.mensaguthaben.MainActivity" />
@@ -47,7 +44,7 @@
         <activity
             android:name="de.yazo_games.mensaguthaben.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="de.yazo_games.mensaguthaben.MainActivity" >
+            android:parentActivityName="de.yazo_games.mensaguthaben.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.yazo_games.mensaguthaben.MainActivity" />
@@ -55,9 +52,9 @@
 
         <activity-alias
             android:name=".ActivityAlias"
+            android:enabled="true"
             android:exported="true"
-            android:targetActivity=".PopupActivity"
-            android:enabled="true">
+            android:targetActivity=".PopupActivity">
 
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
@@ -66,8 +63,8 @@
             </intent-filter>
 
             <meta-data
-                    android:name="android.nfc.action.TECH_DISCOVERED"
-                    android:resource="@xml/tech" />
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/tech" />
         </activity-alias>
     </application>
 
