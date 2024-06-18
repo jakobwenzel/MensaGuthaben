@@ -35,7 +35,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -49,7 +49,7 @@ import de.yazo_games.mensaguthaben.cardreader.Readers;
 import de.yazo_games.mensaguthaben.cardreader.ValueData;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 	private static final String VALUE_TAG = "Value Fragment";
 	public static final String EXTRA_VALUE = "valueData";
 	public static final String ACTION_FULLSCREEN = "de.yazo_games.mensaguthaben.Fullscreen";
@@ -114,10 +114,6 @@ public class MainActivity extends ActionBarActivity {
 
 		Boolean autostart = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autostart",true);
         AutostartRegister.register(getPackageManager(),autostart);
-
-		Toolbar t = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(t);
-		ViewCompat.setTransitionName(t,"toolbar");
 
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
         mIntentFilter = new IntentFilter("android.nfc.action.ADAPTER_STATE_CHANGED");
