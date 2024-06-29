@@ -140,13 +140,7 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Reader
             valueFragment.setValueData(valueData);
 
         }
-    }
 
-    boolean hasNewData = false;
-
-    @Override
-    public void onNewIntent(Intent intent) {
-        Log.i(TAG, "Foreground dispatch");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mAdapter.enableReaderMode(this, this,
                     NfcAdapter.FLAG_READER_NFC_A |
@@ -156,7 +150,13 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Reader
                             NfcAdapter.FLAG_READER_NFC_BARCODE |
                             NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS, null);
         }
+    }
 
+    boolean hasNewData = false;
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        Log.i(TAG, "Foreground dispatch");
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Log.i(TAG, "Discovered tag with intent: " + intent);
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
