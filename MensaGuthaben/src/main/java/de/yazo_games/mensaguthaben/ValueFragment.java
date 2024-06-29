@@ -56,7 +56,7 @@ public class ValueFragment extends Fragment {
 	}
 
 
-	private void updateView() {
+	public void updateView() {
 		if (valueData==null) {
 			tvCurrentValue.setText(getString(R.string.place_on_card));
 			tvLastValue.setVisibility(View.GONE);
@@ -86,7 +86,6 @@ public class ValueFragment extends Fragment {
 	public void setValueData(ValueData valueData) {
 		this.valueData = valueData;
 
-		if (tvCurrentValue !=null)
-			updateView();
+
 	}
 }
