@@ -147,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Reader
                             NfcAdapter.FLAG_READER_NFC_B |
                             NfcAdapter.FLAG_READER_NFC_F |
                             NfcAdapter.FLAG_READER_NFC_V |
-                            NfcAdapter.FLAG_READER_NFC_BARCODE |
-                            NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS, null);
+                            NfcAdapter.FLAG_READER_NFC_BARCODE, null);
         }
     }
 
