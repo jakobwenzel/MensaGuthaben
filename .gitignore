@@ -7,5 +7,5 @@ local.properties
 .idea
 *.apk
 _site
-*.lock
 keystore
+.direnv
