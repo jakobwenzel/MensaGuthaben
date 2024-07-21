@@ -1,33 +1,36 @@
 buildscript {
 
     repositories {
-        jcenter()
+        mavenCentral()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:8.5.0'
     }
 }
 apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
-	compile 'com.android.support:support-v4:21.0.+'
-	compile 'com.android.support:appcompat-v7:21.0.+'
-	compile 'org.apache.commons:commons-lang3:3.1'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
 
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        compileSdk 34
+        targetSdkVersion 34
+        versionCode 16
+        versionName "1.2.2"
     }
     
     signingConfigs {
@@ -48,11 +51,13 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'de.yazo_games.mensaguthaben'
 }
 
-task askForPassword {
+tasks.register('askForPassword') {
     doLast {
-        def storePw = PasswordPrompt.readPassword("Keystore password") ?: "invalid" //If it's null, gradle complains
+        def storePw = PasswordPrompt.readPassword("Keystore password") ?: "invalid"
+        //If it's null, gradle complains
 
 
         android.signingConfigs.release.storePassword = storePw
@@ -60,7 +65,7 @@ task askForPassword {
     }
 }
 
-tasks.whenTaskAdded { theTask ->
+tasks.configureEach { theTask ->
     if (theTask.name.equals("packageRelease")) {
         theTask.dependsOn "askForPassword"
     }

@@ -8,7 +8,8 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
@@ -25,7 +26,7 @@ import de.yazo_games.mensaguthaben.cardreader.ValueData;
 /**
  * Created by wenzel on 28.11.14.
  */
-public class PopupActivity extends ActionBarActivity {
+public class PopupActivity extends AppCompatActivity {
 
 	private static String TAG = PopupActivity.class.getSimpleName();
 
@@ -77,26 +78,24 @@ public class PopupActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.fullscreen:
-				Intent intent = new Intent(PopupActivity.this, MainActivity.class);
-				intent.setAction(MainActivity.ACTION_FULLSCREEN);
-				intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
+        if (item.getItemId() == R.id.fullscreen) {
+            Intent intent = new Intent(PopupActivity.this, MainActivity.class);
+            intent.setAction(MainActivity.ACTION_FULLSCREEN);
+            intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
 
-				if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
-					animateActivity21(intent);
-				} else if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN) {
-					animateActivity16(intent);
-				} else {
-					startActivity(intent);
-					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-				}
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                animateActivity21(intent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                animateActivity16(intent);
+            } else {
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
 
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 	@TargetApi(21)

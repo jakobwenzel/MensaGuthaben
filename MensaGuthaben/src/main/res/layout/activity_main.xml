@@ -5,16 +5,4 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:id="@+id/main"
-	tools:context=".MainActivity">
-
-	<android.support.v7.widget.Toolbar
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:minHeight="?attr/actionBarSize"
-		android:background="?attr/colorPrimary"
-		android:elevation="10dp"
-		android:id="@+id/toolbar"
-
-		app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-	</FrameLayout>
+	tools:context=".MainActivity"/>
