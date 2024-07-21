@@ -45,3 +45,8 @@ The App has been successfully tested on cards used at various universities:
 * HS Zittau/Görlitz
 
 [You can help to support your university as well](otherUnis.md)
+
+
+Data Safety
+===========
+[Data Safety](dataSafety.md)
