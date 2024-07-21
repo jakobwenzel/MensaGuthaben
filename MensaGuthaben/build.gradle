@@ -34,40 +34,22 @@ android {
     }
     
     signingConfigs {
-        release {
-            // We can leave these in environment variables
-            storeFile file(System.getenv("KEYSTORE") ?: "keystore")
-            keyAlias System.getenv("KEY_ALIAS") ?: "jakobwenzel"
-
-            // These two lines make gradle believe that the signingConfigs
-            // section is complete. Without them, tasks like installRelease
-            // will not be available!
-            storePassword "notYourRealPassword"
-            keyPassword "notYourRealPassword"
+        create("release") {
+            if (findProperty("STORE_KEY") != null) {
+                storeFile = file(findProperty("STORE_KEY") as String)
+                storePassword = findProperty("STORE_PASSWORD") as String
+                keyAlias = findProperty("STORE_KEY_ALIAS") as String
+                keyPassword = findProperty("STORE_PASSWORD") as String
+            }
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (findProperty("STORE_KEY") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     namespace 'de.yazo_games.mensaguthaben'
-}
-
-tasks.register('askForPassword') {
-    doLast {
-        def storePw = PasswordPrompt.readPassword("Keystore password") ?: "invalid"
-        //If it's null, gradle complains
-
-
-        android.signingConfigs.release.storePassword = storePw
-        android.signingConfigs.release.keyPassword = storePw
-    }
-}
-
-tasks.configureEach { theTask ->
-    if (theTask.name.equals("packageRelease")) {
-        theTask.dependsOn "askForPassword"
-    }
 }
 
