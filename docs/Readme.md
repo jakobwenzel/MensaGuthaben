@@ -30,6 +30,7 @@ The App has been successfully tested on cards used at various universities:
 * HS Koblenz
 * Uni Koblenz
 * FH Köln
+* Uni Kiel (CAU-Card)
 * Uni Köln
 * Uni Leipzig
 * Uni Lüneburg
