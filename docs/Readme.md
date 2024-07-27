@@ -32,6 +32,7 @@ The App has been successfully tested on cards used at various universities:
 * FH Köln
 * Uni Köln
 * Uni Leipzig
+* Uni Lübeck
 * Uni Lüneburg
 * Uni Magdeburg
 * DHBW Mosbach
