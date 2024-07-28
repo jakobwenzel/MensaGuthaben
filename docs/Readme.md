@@ -27,6 +27,7 @@ The App has been successfully tested on cards used at various universities:
 * Uni Heidelberg
 * Uni Hohenheim (only newer cards)
 * TU Ilmenau
+* Uni Jena (thoska-card)
 * HS Koblenz
 * Uni Koblenz
 * FH Köln
