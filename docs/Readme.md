@@ -38,6 +38,7 @@ The App has been successfully tested on cards used at various universities:
 * HS Offenburg
 * Uni Osnabrück
 * HS Osnabrück
+* Ravensburg-Weingarten University of Applied Sciences 
 * Uni Saarland
 * Uni Stuttgart
 * FH Würzburg
