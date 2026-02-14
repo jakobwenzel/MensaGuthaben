@@ -78,23 +78,23 @@ public class PopupActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.fullscreen) {
-            Intent intent = new Intent(PopupActivity.this, MainActivity.class);
-            intent.setAction(MainActivity.ACTION_FULLSCREEN);
-            intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
+		if (item.getItemId() != R.id.fullscreen)
+			return super.onOptionsItemSelected(item);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                animateActivity21(intent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                animateActivity16(intent);
-            } else {
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        Intent intent = new Intent(PopupActivity.this, MainActivity.class);
+        intent.setAction(MainActivity.ACTION_FULLSCREEN);
+        intent.putExtra(MainActivity.EXTRA_VALUE, valueFragment.getValueData());
 
-            return true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            animateActivity21(intent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            animateActivity16(intent);
+        } else {
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
-        return super.onOptionsItemSelected(item);
+
+        return true;
     }
 
 
@@ -133,20 +133,17 @@ public class PopupActivity extends AppCompatActivity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 
-		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
-			Log.i(TAG,"Discovered tag with intent: " + intent);
-			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+		if (!NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()))
+			return;
 
+		Log.i(TAG,"Discovered tag with intent: " + intent);
+		Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-			try {
-				ValueData val = Readers.getInstance().readTag(tag);
-
-				valueFragment.setValueData(val);
-
-
-			} catch (DesfireException e) {
-				Toast.makeText(this, R.string.communication_fail, Toast.LENGTH_SHORT).show();
-			}
+		try {
+			ValueData val = Readers.getInstance().readTag(tag);
+			valueFragment.setValueData(val);
+		} catch (DesfireException e) {
+			Toast.makeText(this, R.string.communication_fail, Toast.LENGTH_SHORT).show();
 		}
 	}
 

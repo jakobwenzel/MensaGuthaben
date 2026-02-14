@@ -25,6 +25,8 @@ package com.codebutler.farebot;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -75,15 +77,15 @@ public class Utils {
         }
     }
 
-    public static String getHexString (byte[] b) throws Exception {
-        String result = "";
-        for (int i=0; i < b.length; i++) {
-            result += Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
-        }
-        return result;
+    public static @NonNull String getHexString (byte[] b) throws Exception {
+        StringBuilder result = new StringBuilder();
+	    for (byte value : b) {
+		    result.append(Integer.toString((value & 0xff) + 0x100, 16).substring(1));
+	    }
+        return result.toString();
     }
 
-    public static String getHexString (byte[] b, String defaultResult) {
+    public static @NonNull String getHexString (byte[] b, String defaultResult) {
         try {
             return getHexString(b);
         } catch (Exception ex) {
@@ -134,19 +136,18 @@ public class Utils {
         long value = 0;
         for (int i = 0; i < length; i++) {
             int shift = (length - 1 - i) * 8;
-            value += (b[i + offset] & 0x000000FF) << shift;
+            value += (long) (b[i + offset] & 0x000000FF) << shift;
         }
         return value;
     }
 
     public static byte[] byteArraySlice(byte[] b, int offset, int length) {
         byte[] ret = new byte[length];
-        for (int i = 0; i < length; i++)
-            ret[i] = b[offset+i];
+	    System.arraycopy(b, offset, ret, 0, length);
         return ret;
     }
 
-    public static String xmlNodeToString (Node node) throws Exception {
+    public static @NonNull String xmlNodeToString (Node node) throws Exception {
         // The amount of code required to do simple things in Java is incredible.
         Source source = new DOMSource(node);
         StringWriter stringWriter = new StringWriter();
@@ -174,15 +175,14 @@ public class Utils {
             if (causeMessage == null)
                 causeMessage = ex.getCause().toString();
 
-            if (causeMessage != null)
-                errorMessage += ": " + causeMessage;
+            errorMessage += ": " + causeMessage;
         }
 
         return errorMessage;
     }
 
 
-    public static <T> T findInList(List<T> list, Matcher<T> matcher) {
+    public static <T> @Nullable T findInList(List<T> list, Matcher<T> matcher) {
         for (T item : list) {
             if (matcher.matches(item)) {
                 return item;
@@ -191,8 +191,8 @@ public class Utils {
         return null;
     }
 
-    public static interface Matcher<T> {
-        public boolean matches(T t);
+    public interface Matcher<T> {
+        boolean matches(T t);
     }
 
     public static int convertBCDtoInteger(byte data) {
@@ -213,21 +213,23 @@ public class Utils {
 
         if (iSByte == iEByte) {
             return (int)(((char)buffer[iEByte] >> (7 - iEBit)) & ((char)0xFF >> (8 - iLength)));
-        } else {
-            int uRet = (((char)buffer[iSByte] & (char)((char)0xFF >> iSBit)) << (((iEByte - iSByte - 1) * 8) + (iEBit + 1)));
-
-            for (int i = iSByte + 1; i < iEByte; i++) {
-                uRet |= (((char)buffer[i] & (char)0xFF) << (((iEByte - i - 1) * 8) + (iEBit + 1)));
-            }
-
-            uRet |= (((char)buffer[iEByte] & (char)0xFF)) >> (7 - iEBit);
-
-            return uRet;
         }
+
+        int uRet = (((char)buffer[iSByte] & (char)((char)0xFF >> iSBit)) << (((iEByte - iSByte - 1) * 8) + (iEBit + 1)));
+
+        for (int i = iSByte + 1; i < iEByte; i++) {
+            uRet |= (((char)buffer[i] & (char)0xFF) << (((iEByte - i - 1) * 8) + (iEBit + 1)));
+        }
+
+        uRet |= (((char)buffer[iEByte] & (char)0xFF)) >> (7 - iEBit);
+
+        return uRet;
     }
 
-
-	public static DesfireFileSettings selectAppFile(DesfireProtocol tag, int appID, int fileID) {
+	///
+	/// @return null in case of an error
+	///
+	public static @Nullable DesfireFileSettings selectAppFile(DesfireProtocol tag, int appID, int fileID) {
 		try {
 			tag.selectApp(appID);
 		} catch (DesfireException e) {
@@ -242,21 +244,31 @@ public class Utils {
 		}
 	}
 
-	public static boolean arrayContains(int[] arr, int item) {
-		for (int i: arr)
+	///
+	/// Checks if the given array contains the given integer.
+	///
+	/// @param array The list of items to search.
+	/// @param item The integer to search for.
+	/// @return True if the array contains the integer, false otherwise.
+	///
+	public static boolean arrayContains(int[] array, int item) {
+		for (int i: array)
 			if (i==item)
 				return true;
 		return false;
 	}
 
-	public static boolean containsAppFile(DesfireProtocol tag, int appID, int fileID) {
-		try {
-			tag.selectApp(appID);
-		} catch (DesfireException e) {
-			Log.w(TAG,"App not found");
-			Log.w(TAG, e);
-			return false;
-		}
+	///
+	/// Checks if the given [tag][DesfireProtocol] contains a file with the given ID.
+	///
+	/// @param tag The tag to search.
+	/// @param appID the ID of the app to [select][DesfireProtocol#selectApp(int)].
+	/// @param fileID The ID of the file to search for.
+	/// @return True if the tag contains the file, false otherwise.
+	/// @throws DesfireException If the given app ID does not exist.
+	///
+	public static boolean containsAppFile(DesfireProtocol tag, int appID, int fileID) throws DesfireException {
+		tag.selectApp(appID);
 		try {
 			return arrayContains(tag.getFileList(),fileID);
 		} catch (DesfireException e) {

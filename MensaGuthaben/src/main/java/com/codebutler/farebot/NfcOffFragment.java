@@ -25,21 +25,13 @@ public class NfcOffFragment extends DialogFragment {
 			.setTitle(R.string.nfc_off)
 			.setMessage(R.string.turn_nfc_on)
 			.setCancelable(true)
-			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.dismiss();
-				}
-			})
-			.setNeutralButton(R.string.goto_settings, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-						Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
-						getActivity().startActivity(intent);
-					} else {
-						Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-						getActivity().startActivity(intent);
-					}
-				}
+			.setNegativeButton(android.R.string.cancel, (DialogInterface dialog, int id) -> dialog.dismiss())
+			.setNeutralButton(R.string.goto_settings, (DialogInterface dialog, int id) -> {
+				Intent intent;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+					intent = new Intent(Settings.ACTION_NFC_SETTINGS);
+				else intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+				getActivity().startActivity(intent);
 			}).create();
 	}
 }

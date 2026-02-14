@@ -23,7 +23,7 @@
 package com.codebutler.farebot.card.desfire;
 
 public class DesfireRecord {
-    private byte[] mData;
+    private final byte[] mData;
 
     public DesfireRecord (byte[] data) {
         mData = data;

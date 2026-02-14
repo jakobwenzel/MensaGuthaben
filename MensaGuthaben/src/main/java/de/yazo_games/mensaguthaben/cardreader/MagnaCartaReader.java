@@ -22,6 +22,7 @@
 
 package de.yazo_games.mensaguthaben.cardreader;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codebutler.farebot.card.desfire.DesfireException;
@@ -30,7 +31,7 @@ import com.codebutler.farebot.card.desfire.DesfireProtocol;
 public class MagnaCartaReader implements ICardReader {
 	private static final String TAG = MagnaCartaReader.class.getName();
 	@Override
-	public ValueData readCard(DesfireProtocol card) {
+	public @Nullable ValueData readCard(DesfireProtocol card) {
 		final int appId = 0xF080F3;
 		final int fileId = 2;
 

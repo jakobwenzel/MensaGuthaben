@@ -66,12 +66,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.preferences_toolbar, root, false);
 		root.addView(bar, 0); // insert at top
 		bar.setTitle(R.string.title_activity_settings);
-		bar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		bar.setNavigationOnClickListener((View view) -> finish());
 
     }
 
@@ -141,7 +136,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key.equals("autostart")) {
-            Boolean value = sharedPreferences.getBoolean(key, true);
+            boolean value = sharedPreferences.getBoolean(key, true);
             AutostartRegister.register(getPackageManager(),value);
         }
     }

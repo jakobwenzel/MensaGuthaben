@@ -23,6 +23,8 @@
 package com.codebutler.farebot.card.desfire;
 
 import android.nfc.tech.IsoDep;
+import android.support.annotation.NonNull;
+
 import com.codebutler.farebot.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -47,13 +49,16 @@ public class DesfireProtocol {
     static final byte PERMISSION_DENIED = (byte) 0x9D;
     static final byte ADDITIONAL_FRAME  = (byte) 0xAF;
 
-    private IsoDep mTagTech;
+    private final IsoDep mTagTech;
 
     public DesfireProtocol(IsoDep tagTech) {
         mTagTech = tagTech;
     }
 
-    public DesfireManufacturingData getManufacturingData() throws DesfireException {
+	///
+	/// @throws DesfireException If the response is invalid.
+	///
+    public @NonNull DesfireManufacturingData getManufacturingData() throws DesfireException {
         byte[] respBuffer = sendRequest(GET_MANUFACTURING_DATA);
         
         if (respBuffer.length != 28)
@@ -95,9 +100,8 @@ public class DesfireProtocol {
         return fileIds;
     }
 
-    public DesfireFileSettings getFileSettings (int fileNo) throws DesfireException {
-		byte[] data = new byte[0];
-		data = sendRequest(GET_FILE_SETTINGS, new byte[] { (byte) fileNo });
+    public @NonNull DesfireFileSettings getFileSettings (int fileNo) throws DesfireException {
+		byte[] data = sendRequest(GET_FILE_SETTINGS, new byte[] { (byte) fileNo });
 		return DesfireFileSettings.Create(data);
     }
 
@@ -133,25 +137,26 @@ public class DesfireProtocol {
     private byte[] sendRequest (byte command, byte[] parameters) throws DesfireException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-		byte[] recvBuffer = new byte[0];
+		byte[] receiveBuffer;
 		try {
-			recvBuffer = mTagTech.transceive(wrapMessage(command, parameters));
+			receiveBuffer = mTagTech.transceive(wrapMessage(command, parameters));
 		} catch (IOException e) {
 			throw new DesfireException(e);
 		}
 
 		while (true) {
-            if (recvBuffer[recvBuffer.length - 2] != (byte) 0x91)
+            if (receiveBuffer[receiveBuffer.length - 2] != (byte) 0x91)
                 throw new DesfireException("Invalid response");
 
-            output.write(recvBuffer, 0, recvBuffer.length - 2);
+            output.write(receiveBuffer, 0, receiveBuffer.length - 2);
 
-            byte status = recvBuffer[recvBuffer.length - 1];
-            if (status == OPERATION_OK) {
+            byte status = receiveBuffer[receiveBuffer.length - 1];
+            if (status == OPERATION_OK)
                 break;
-            } else if (status == ADDITIONAL_FRAME) {
+
+			if (status == ADDITIONAL_FRAME) {
 				try {
-					recvBuffer = mTagTech.transceive(wrapMessage(GET_ADDITIONAL_FRAME, null));
+					receiveBuffer = mTagTech.transceive(wrapMessage(GET_ADDITIONAL_FRAME, null));
 				} catch (IOException e) {
 					throw new DesfireException(e);
 				}

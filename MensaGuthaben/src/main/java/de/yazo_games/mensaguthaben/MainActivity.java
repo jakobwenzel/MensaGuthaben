@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Reader
 
         }
 
-        Boolean autostart = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autostart", true);
+        boolean autostart = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autostart", true);
         AutostartRegister.register(getPackageManager(), autostart);
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -141,14 +141,15 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Reader
 
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mAdapter.enableReaderMode(this, this,
-                    NfcAdapter.FLAG_READER_NFC_A |
-                            NfcAdapter.FLAG_READER_NFC_B |
-                            NfcAdapter.FLAG_READER_NFC_F |
-                            NfcAdapter.FLAG_READER_NFC_V |
-                            NfcAdapter.FLAG_READER_NFC_BARCODE, null);
-        }
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+			return;
+
+	    mAdapter.enableReaderMode(this, this,
+		    NfcAdapter.FLAG_READER_NFC_A |
+			    NfcAdapter.FLAG_READER_NFC_B |
+			    NfcAdapter.FLAG_READER_NFC_F |
+			    NfcAdapter.FLAG_READER_NFC_V |
+			    NfcAdapter.FLAG_READER_NFC_BARCODE, null);
     }
 
     boolean hasNewData = false;

@@ -22,6 +22,7 @@
 
 package de.yazo_games.mensaguthaben.cardreader;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codebutler.farebot.Utils;
@@ -31,30 +32,33 @@ import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
 public class IntercardReader implements ICardReader {
 	private static final String TAG = IntercardReader.class.getName();
+
+	///
+	/// @return null in case of an error
+	///
 	@Override
-	public ValueData readCard(DesfireProtocol card) throws DesfireException {
+	public @Nullable ValueData readCard(DesfireProtocol card) throws DesfireException {
 
 		final int appId = 0x5F8415;
 		final int fileId = 1;
 		Log.i(TAG,"Selecting app and file");
 		DesfireFileSettings settings = Utils.selectAppFile(card, appId, fileId);
 
-		if (settings instanceof DesfireFileSettings.ValueDesfireFileSettings) {
-			Log.i(TAG,"found value file");
-			DesfireFileSettings.ValueDesfireFileSettings value = (DesfireFileSettings.ValueDesfireFileSettings) settings;
-
-			Log.i(TAG, "Reading value");
-			int data = 0;
-			try {
-				data = card.readValue(fileId);
-				return new ValueData(data,value.value);
-			} catch (Exception e) {
-				Log.w(TAG,"Exception while trying to read value",e);
-				return null;
-			}
-
-		} else {
+		if (!(settings instanceof DesfireFileSettings.ValueDesfireFileSettings)) {
 			Log.i(TAG,"File is not a value file, tag is incompatible.");
+			return null;
+		}
+
+		Log.i(TAG,"found value file");
+		DesfireFileSettings.ValueDesfireFileSettings value = (DesfireFileSettings.ValueDesfireFileSettings) settings;
+
+		Log.i(TAG, "Reading value");
+
+		try {
+			int data = card.readValue(fileId);
+			return new ValueData(data,value.value);
+		} catch (Exception e) {
+			Log.w(TAG,"Exception while trying to read value",e);
 			return null;
 		}
 	}

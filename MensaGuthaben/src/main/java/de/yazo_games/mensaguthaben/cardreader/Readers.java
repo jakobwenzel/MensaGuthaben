@@ -24,6 +24,8 @@ package de.yazo_games.mensaguthaben.cardreader;
 
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codebutler.farebot.card.desfire.DesfireException;
@@ -42,7 +44,7 @@ public class Readers implements ICardReader {
 
 
 	@Override
-	public ValueData readCard(DesfireProtocol card) throws DesfireException {
+	public @Nullable ValueData readCard(DesfireProtocol card) throws DesfireException {
 		Log.i(TAG,"Trying all readers");
 		for (ICardReader reader : readers) {
 			Log.i(TAG,"Trying "+reader.getClass().getSimpleName());
@@ -54,7 +56,7 @@ public class Readers implements ICardReader {
 	}
 
 
-	public ValueData readTag(Tag tag) throws DesfireException {
+	public @Nullable ValueData readTag(Tag tag) throws DesfireException {
 		Log.i(TAG,"Loading tag");
 		IsoDep tech = IsoDep.get(tag);
 
@@ -103,7 +105,7 @@ public class Readers implements ICardReader {
 
 	}
 
-	public static Readers getInstance() {
+	public static @NonNull Readers getInstance() {
 		if (instance == null)
 			instance = new Readers();
 		return instance;

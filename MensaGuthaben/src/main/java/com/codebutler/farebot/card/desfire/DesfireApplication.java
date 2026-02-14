@@ -24,6 +24,8 @@ package com.codebutler.farebot.card.desfire;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class DesfireApplication implements Parcelable {
     private int           mId;
@@ -42,7 +44,13 @@ public class DesfireApplication implements Parcelable {
         return mFiles;
     }
 
-    public DesfireFile getFile (int fileId) {
+	///
+	/// Returns the [DesfireFile] with the given [ID][DesfireFile#getId()] from the [#mFiles].
+	///
+	/// @param fileId The ID of the file looked for.
+	/// @return The file with the given ID. Null if no such file is present.
+	///
+    public @Nullable DesfireFile getFile (int fileId) {
         for (DesfireFile file : mFiles) {
             if (file.getId() == fileId)
                 return file;
@@ -51,7 +59,7 @@ public class DesfireApplication implements Parcelable {
     }
 
     public static final Parcelable.Creator<DesfireApplication> CREATOR = new Parcelable.Creator<DesfireApplication>() {
-        public DesfireApplication createFromParcel(Parcel source) {
+        public @NonNull DesfireApplication createFromParcel(Parcel source) {
             int id = source.readInt();
 
             DesfireFile[] files = new DesfireFile[source.readInt()];
@@ -60,7 +68,7 @@ public class DesfireApplication implements Parcelable {
             return new DesfireApplication(id, files);
         }
 
-        public DesfireApplication[] newArray (int size) {
+        public @NonNull DesfireApplication[] newArray (int size) {
             return new DesfireApplication[size];
         }
     };

@@ -22,6 +22,8 @@
 
 package de.yazo_games.mensaguthaben.cardreader;
 
+import android.support.annotation.Nullable;
+
 import com.codebutler.farebot.card.desfire.DesfireException;
 import com.codebutler.farebot.card.desfire.DesfireProtocol;
 
@@ -36,5 +38,5 @@ public interface ICardReader {
 	 * @return Card's data, null if unsupported.
 	 * @throws DesfireException Communication error
 	 */
-	public ValueData readCard(DesfireProtocol card) throws DesfireException;
+	@Nullable ValueData readCard(DesfireProtocol card) throws DesfireException;
 }

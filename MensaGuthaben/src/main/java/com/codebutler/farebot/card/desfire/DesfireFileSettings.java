@@ -28,6 +28,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.codebutler.farebot.Utils;
 
@@ -43,8 +44,8 @@ public abstract class DesfireFileSettings implements Parcelable {
     static final byte LINEAR_RECORD_FILE = (byte) 0x03;
     static final byte CYCLIC_RECORD_FILE = (byte) 0x04;
     
-    public static DesfireFileSettings Create (byte[] data) throws DesfireException {
-        byte fileType = (byte) data[0];
+    public static @NonNull DesfireFileSettings Create (byte[] data) throws DesfireException {
+        byte fileType = data[0];
 
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
 
@@ -54,8 +55,8 @@ public abstract class DesfireFileSettings implements Parcelable {
             return new RecordDesfireFileSettings(stream);
         else if (fileType == VALUE_FILE)
             return new ValueDesfireFileSettings(stream);
-        else
-            throw new DesfireException("Unknown file type: " + Integer.toHexString(fileType));
+
+        throw new DesfireException("Unknown file type: " + Integer.toHexString(fileType));
     }
 
     private DesfireFileSettings (ByteArrayInputStream stream) {
@@ -72,7 +73,7 @@ public abstract class DesfireFileSettings implements Parcelable {
         this.accessRights = accessRights;
     }
 
-    public String getFileTypeName () {
+    public @NonNull String getFileTypeName () {
         switch (fileType) {
             case STANDARD_DATA_FILE:
                 return "Standard";
@@ -90,7 +91,7 @@ public abstract class DesfireFileSettings implements Parcelable {
     }
 
     public static final Parcelable.Creator<DesfireFileSettings> CREATOR = new Parcelable.Creator<DesfireFileSettings>() {
-        public DesfireFileSettings createFromParcel(Parcel source) {
+        public @NonNull DesfireFileSettings createFromParcel(Parcel source) {
             byte fileType       = source.readByte();
             byte commSetting    = source.readByte();
             byte[] accessRights = new byte[source.readInt()];
@@ -104,9 +105,9 @@ public abstract class DesfireFileSettings implements Parcelable {
                 int maxRecords = source.readInt();
                 int curRecords = source.readInt();
                 return new RecordDesfireFileSettings(fileType, commSetting, accessRights, recordSize, maxRecords, curRecords);
-            } else {
-                return new UnsupportedDesfireFileSettings(fileType);
             }
+
+            return new UnsupportedDesfireFileSettings(fileType);
         }
 
         public DesfireFileSettings[] newArray(int size) {
